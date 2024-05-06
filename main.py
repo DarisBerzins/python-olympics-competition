@@ -36,7 +36,7 @@ while running:
 
         t0 = t
 
-        fpsImage = font.render(str(int(clock.get_fps())), True, (255, 255, 255))
+        fpsImage = font.render("FPS: " + str(int(clock.get_fps())), True, (255, 255, 255))
 
         pg.event.pump()
         keys = pg.key.get_pressed()
