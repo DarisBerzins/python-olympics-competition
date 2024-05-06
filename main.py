@@ -5,7 +5,6 @@ t0 = 0.001 * pg.time.get_ticks()
 
 maxdt = 0.5
 
-
 xmax = 1280
 ymax = 720
 reso = (xmax, ymax)
@@ -20,12 +19,18 @@ bgRect = background.get_rect()
 
 player = pg.Rect(100, ymax//2, 50, 50)
 
+font = pg.font.SysFont(None, 24)
+
+
 running = True
 while running:
     t = 0.001 * pg.time.get_ticks()
     dt = min(t-t0, maxdt)
     if dt > 0.0:
         t0 = t
+
+        fpsImage = font.render(str(1/dt), True, (255, 255, 255))
+
 
         pg.event.pump()
         keys = pg.key.get_pressed()
@@ -42,16 +47,10 @@ while running:
         bgRect.centerx = position
         
         screen.blit(background, bgRect)
+        screen.blit(fpsImage, (20, 20))
         pg.draw.rect(screen, (128, 0, 255), player)
 
         pg.display.flip()
-
-
-
-
-    pass
-
-
 
 
 pg.quit()
