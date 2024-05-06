@@ -6,19 +6,19 @@ t0 = 0.001 * pg.time.get_ticks()
 maxdt = 0.5
 
 
-xmax = 720
-ymax = 480
+xmax = 1280
+ymax = 720
 reso = (xmax, ymax)
 screen = pg.display.set_mode(reso)
 
-ax = 0
-ay = 0
-vx = 0
-vy = 0
-sx = xmax//2
-sy = ymax//2
+velocity = 0
+acceleration = 0
+position = xmax//2
 
-player = pg.Rect(sx, sy, 50, 50)
+background = pg.image.load("assets/test-image.png")
+bgRect = background.get_rect()
+
+player = pg.Rect(100, ymax//2, 50, 50)
 
 running = True
 while running:
@@ -27,30 +27,23 @@ while running:
     if dt > 0.0:
         t0 = t
 
-        pg.draw.rect(screen, (255, 255, 255), screen.get_rect())
-
         pg.event.pump()
         keys = pg.key.get_pressed()
-        if keys[pg.K_UP]:
-            vy += -1
-        if keys[pg.K_DOWN]:
-            vy += 1
         if keys[pg.K_RIGHT]:
-            vx += 1
+            velocity += 10
         if keys[pg.K_LEFT]:
-            vx += -1
+            velocity += -10
         if keys[pg.K_ESCAPE]:
             running = False
 
-        vx = vx + ax * dt
-        vy = vy + ay * dt
-        sx = sx + vx * dt
-        sy = sy + vy * dt
+        velocity = velocity + acceleration * dt
+        position = position + velocity * dt
 
-        player.centerx = sx
-        player.centery = sy
+        bgRect.centerx = position
         
-        pg.draw.rect(screen, (0, 0, 255), player)
+        screen.blit(background, bgRect)
+        pg.draw.rect(screen, (128, 0, 255), player)
+
         pg.display.flip()
 
 
