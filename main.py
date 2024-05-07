@@ -28,7 +28,8 @@ background = pg.image.load("assets/test-image.png")
 bgRect = background.get_rect()
 bgRect2 = background.get_rect()
 
-player = pg.Rect(100, ymax//2, 50, 50)
+player = pg.Rect(100, (2*ymax)//3, 50, 50)
+player2 = pg.Rect(100, ymax//3, 50, 50)
 
 font = pg.font.SysFont(None, 24)
 
@@ -54,15 +55,16 @@ while running:
         # for event in pg.event.get():
         #     if event.type == pg.quit():
         #         running = False
-        #     if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT and not leftFlag:
-        #         rightFlag = True
-        #         value -= 10
-        #     elif event.type == pg.KEYUP and event.key == pg.K_RIGHT:
-        #         rightFlag = False
-        #     if event.type == pg.KEYDOWN and event.key == pg.K_LEFT and not rightFlag:
-        #         leftFlag = True
-        #         value -= 10
-        #     elif event.type == pg.KEYUP and event.key == pg.K_LEFT
+            # if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT and not leftFlag:
+            #     rightFlag = True
+            #     value -= 10
+            # elif event.type == pg.KEYUP and event.key == pg.K_RIGHT:
+            #     rightFlag = False
+            # if event.type == pg.KEYDOWN and event.key == pg.K_LEFT and not rightFlag:
+            #     leftFlag = True
+            #     value -= 10
+            # elif event.type == pg.KEYUP and event.key == pg.K_LEFT:
+            #     leftFlag = False
 
         if keys[pg.K_LEFT] and keys[pg.K_RIGHT]:
             pass
@@ -97,6 +99,7 @@ while running:
         screen.blit(fpsImage, (20, 20))
         screen.blit(speedImage, (xmax-100, 20))
         pg.draw.rect(screen, (128, 0, 255), player)
+        pg.draw.rect(screen, (0, 128, 255), player2)
         pg.display.flip()
 
 pg.quit()
