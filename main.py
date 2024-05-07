@@ -23,7 +23,6 @@ flag = False
 leftFlag = False
 rightFlag = False
 
-
 background = pg.image.load("assets/test-image.png")
 bgRect = background.get_rect()
 bgRect2 = background.get_rect()
@@ -36,7 +35,6 @@ font = pg.font.SysFont(None, 24)
 def GetAlternatingInputs(keys, value, flag):
     
     return value
-
 
 running = True
 while running:
@@ -83,6 +81,9 @@ while running:
             timerThing = 0.0
             if value < 0:
                 value += 5
+                value //= 1.1
+            elif value > 0:
+                value = 0
 
         position = position + value * dt
         position2 = position + xmax
