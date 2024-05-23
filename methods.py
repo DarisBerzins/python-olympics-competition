@@ -9,7 +9,7 @@ class pressedKeys():
     a = False
     d = False
 
-class Player():
+class player():
     pos = np.array([0, 300])
     vel = np.array([0, 0])
     frame = 0
@@ -22,30 +22,28 @@ class Player():
     elif frame == 3:
         pass #make this the destroyed boat sprite
     hitbox = sprite.get_rect()
-    
-    # def draw(self,screen):
-    #     self.hitbox = self.sprite.get_rect()
-    #     screen.blit(self.hitbox,(self.x,self.y))
-    #     screen.blit(self.sprite,(self.x,self.y)) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
+    # hitbox.height -= 20
+    def draw(self,screen):
+        self.hitbox.topleft = (100, self.pos[1])
+        pg.draw.rect(screen, (255, 0, 0), self.hitbox)
+        screen.blit(self.sprite,(100, self.pos[1])) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
 
 class Obstacle():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
-    def __init__(self,sprites,x,y,v):
+    color = (255, 0, 0)
+    def __init__(self,sprites,pos,initialpos):
         self.sprite = sprites[randrange(0,len(sprites)-1)]
         self.sprite = pg.transform.scale(self.sprite, (200,200))
-        self.x = x
-        self.y = y
-        self.v = v
+        self.pos = pos
+        self.initialpos = initialpos
         self.hitbox = self.sprite.get_rect()
-        
-    def move(self,dt):
-        self.x += self.v*dt
+    
+    # def move(self,dt):
+    #     self.x += self.v*dt
     def draw(self,screen):
-        self.hitbox = self.sprite.get_rect()
-        self.hitbox.top = self.y
-        self.hitbox.left = self.x
-        pg.draw.rect(screen, (255, 0, 0), self.hitbox)
-        screen.blit(self.sprite,(self.x,self.y))
+        self.hitbox.topleft = self.pos
+        pg.draw.rect(screen, self.color, self.hitbox)
+        screen.blit(self.sprite,self.pos)
 
 #methods
 def InitPygame():

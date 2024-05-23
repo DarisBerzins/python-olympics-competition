@@ -15,12 +15,6 @@ ymax = 720
 reso = (xmax, ymax)
 screen = pg.display.set_mode(reso)
 
-velocity = 0
-acceleration = 0
-position = 0
-position2 = xmax
-value = 0
-vert = 0
 timeStep = 0.0
 flag = False
 startTime = 0
@@ -37,7 +31,10 @@ for file in os.listdir(dir):
     sprites.append(pg.image.load(os.path.join(dir,file)))
 
 running = True
-trash = []
+trash = [Obstacle(sprites,np.array([2*xmax,randrange(0, ymax-100, 50)]), 0)]
+trashinterval = xmax
+
+Player = player()
 while running:
     t = 0.001 * pg.time.get_ticks()
     dt = min(t-t0, maxdt)
@@ -92,7 +89,7 @@ while running:
                 Player.vel[0] = -5     
 
         Player.pos = Player.pos + Player.vel * dt
-        print(Player.pos[1], Player.vel[1])
+        # print(Player.pos[1], Player.vel[1])
 
         bgRect.left = Player.pos[0] % xmax - xmax
         bgRect2.left = Player.pos[0] % xmax
@@ -103,17 +100,19 @@ while running:
         screen.blit(fpsImage, (20, 20))
         screen.blit(speedImage, (xmax-100, 20))
         # print(Player.pos, Player.vel)
-        screen.blit(Player.sprite, (100, Player.pos[1]))
-        
-        if int(position)%1000==0:
-            trash.append(Obstacle(sprites,xmax,randrange(0, ymax-100, 50),-5))
+        # screen.blit(Player.sprite, (100, Player.pos[1]))
+        Player.draw(screen)
+
         for obj in trash:
-            obj.v = value
-            obj.move(dt)
+            obj.pos[0] = xmax-(obj.initialpos-Player.pos[0])
             obj.draw(screen)
-
+            collide = pg.Rect.colliderect(Player.hitbox, obj.hitbox)
+            if collide: 
+                obj.color = (0,255,0)
+        dist = (xmax-(obj.initialpos-Player.pos[0]))
+        if (xmax - trash[-1].pos[0] > trashinterval):
+            trash.append(Obstacle(sprites,np.array([xmax,randrange(0, ymax-100, 50)]), Player.pos[0]))
         pg.display.flip()
-
 pg.quit()
 
 
