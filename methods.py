@@ -23,10 +23,10 @@ class Player():
         pass #make this the destroyed boat sprite
     hitbox = sprite.get_rect()
     
-    def draw(self,screen):
-        self.hitbox = self.sprite.get_rect()
-        screen.blit(self.hitbox,(self.x,self.y))
-        screen.blit(self.sprite,(self.x,self.y)) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
+    # def draw(self,screen):
+    #     self.hitbox = self.sprite.get_rect()
+    #     screen.blit(self.hitbox,(self.x,self.y))
+    #     screen.blit(self.sprite,(self.x,self.y)) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
 
 class Obstacle():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
@@ -42,7 +42,9 @@ class Obstacle():
         self.x += self.v*dt
     def draw(self,screen):
         self.hitbox = self.sprite.get_rect()
-        screen.blit(self.hitbox,(self.x,self.y))
+        self.hitbox.top = self.y
+        self.hitbox.left = self.x
+        pg.draw.rect(screen, (255, 0, 0), self.hitbox)
         screen.blit(self.sprite,(self.x,self.y))
 
 #methods

@@ -107,7 +107,7 @@ while running:
         screen.blit(fpsImage, (20, 20))
         screen.blit(speedImage, (xmax-100, 20))
 
-        screen.blit(Player.surf, (100, ymax//2 + vert))
+        screen.blit(Player.sprite, (100, ymax//2 + vert))
         
         if int(position)%1000==0:
             trash.append(Obstacle(sprites,xmax,randrange(0, ymax-100, 50),-5))
