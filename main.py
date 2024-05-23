@@ -23,14 +23,7 @@ value = 0
 vert = 0
 timerThing = 0.0
 flag = False
-leftFlag = False
-rightFlag = False
-
-class pressedKeys():
-    left = False
-    right = False
-    a = False
-    d = False
+timing = 0
 
 background = pg.image.load("assets/test-image.png")
 bgRect = background.get_rect()
@@ -72,18 +65,22 @@ while running:
                     case pg.K_LEFT: pressedKeys.left = False
                     case pg.K_d: pressedKeys.d = False
                     case pg.K_a: pressedKeys.a = False
+
+
         if (pressedKeys.right and pressedKeys.left) or (pressedKeys.left and pressedKeys.d) or (pressedKeys.right and pressedKeys.a) or (pressedKeys.a and pressedKeys.d):
             pass
         elif pressedKeys.right and pressedKeys.d:
             if not flag:
-                value -= 20
+                value -= 50
+                timing = pg.time.get_ticks()/1000
             flag = True
-            vert += 1
+            vert += timing/(pg.time.get_ticks()/500)
         elif pressedKeys.left and pressedKeys.a:
             if flag:
-                value -= 20
+                value -= 50
+                timing = pg.time.get_ticks()/1000
             flag = False
-            vert -= 1
+            vert -= timing/(pg.time.get_ticks()/500)
 
         timerThing += dt
         if timerThing > 0.1:
@@ -110,9 +107,9 @@ while running:
         screen.blit(fpsImage, (20, 20))
         screen.blit(speedImage, (xmax-100, 20))
 
-        screen.blit(Player.surf, (100, 2*ymax//3 + vert))
+        screen.blit(Player.surf, (100, ymax//2 + vert))
         
-        if position%50==0:
+        if int(position)%1000==0:
             trash.append(Obstacle(sprites,xmax,randrange(0, ymax-100, 50),-5))
         for obj in trash:
             obj.v = value
