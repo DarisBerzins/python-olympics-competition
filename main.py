@@ -21,9 +21,9 @@ position = 0
 position2 = xmax
 value = 0
 vert = 0
-timerThing = 0.0
+timeStep = 0.0
 flag = False
-timing = 0
+startTime = 0
 
 background = pg.image.load("assets/test-image.png")
 bgRect = background.get_rect()
@@ -46,7 +46,7 @@ while running:
         t0 = t
 
         fpsImage = font.render("FPS: " + str(int(clock.get_fps())), True, (255, 255, 255))
-        speedImage = font.render("Speed: " + str(value), True, (255, 255, 255))
+        speedImage = font.render("Speed: " + str(Player.vel[0]), True, (255, 255, 255))
 
         for event in pg.event.get(pump=True):
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
@@ -66,48 +66,44 @@ while running:
                     case pg.K_d: pressedKeys.d = False
                     case pg.K_a: pressedKeys.a = False
 
-
+        Player.vel[1] = 0
         if (pressedKeys.right and pressedKeys.left) or (pressedKeys.left and pressedKeys.d) or (pressedKeys.right and pressedKeys.a) or (pressedKeys.a and pressedKeys.d):
             pass
         elif pressedKeys.right and pressedKeys.d:
             if not flag:
-                value -= 50
-                timing = pg.time.get_ticks()/1000
+                Player.vel[0] -= 50
+                startTime = pg.time.get_ticks()
             flag = True
-            vert += timing/(pg.time.get_ticks()/500)
+            Player.vel[1] = startTime*100/(pg.time.get_ticks())
         elif pressedKeys.left and pressedKeys.a:
             if flag:
-                value -= 50
-                timing = pg.time.get_ticks()/1000
+                Player.vel[0] -= 50
+                startTime = pg.time.get_ticks()
             flag = False
-            vert -= timing/(pg.time.get_ticks()/500)
+            Player.vel[1] = -startTime*100/(pg.time.get_ticks())
 
-        timerThing += dt
-        if timerThing > 0.1:
-            timerThing = 0.0
-            if value < -5:
-                value += 5
-                value //= 1.1
-            elif value > -5:
-                value = -5     
-        
-        position = position + value * dt
-        position2 = position + xmax
-        bgRect.left = position
-        bgRect2.left = position2
-        
-        if position > xmax:
-            position = 0
-        elif position < -xmax:
-            position = 0
+        timeStep += dt
+        if timeStep > 0.1:
+            timeStep = 0.0
+            if Player.vel[0] < -5:
+                Player.vel[0] += 5
+                Player.vel[0] //= 1.1
+            elif Player.vel[0] > -5:
+                Player.vel[0] = -5     
+
+        Player.pos = Player.pos + Player.vel * dt
+        print(Player.pos[1], Player.vel[1])
+
+        bgRect.left = Player.pos[0] % xmax - xmax
+        bgRect2.left = Player.pos[0] % xmax
         
         screen.blit(background, bgRect)
         screen.blit(background, bgRect2)
 
         screen.blit(fpsImage, (20, 20))
         screen.blit(speedImage, (xmax-100, 20))
-
-        screen.blit(Player.sprite, (100, ymax//2 + vert))
+        # print(Player.pos, Player.vel)
+        screen.blit(Player.sprite, (100, Player.pos[1]))
         
         if int(position)%1000==0:
             trash.append(Obstacle(sprites,xmax,randrange(0, ymax-100, 50),-5))

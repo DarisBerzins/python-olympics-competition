@@ -10,7 +10,7 @@ class pressedKeys():
     d = False
 
 class Player():
-    pos = np.array([0, 0])
+    pos = np.array([0, 300])
     vel = np.array([0, 0])
     frame = 0
     if frame == 0:
