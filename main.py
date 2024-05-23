@@ -113,7 +113,7 @@ while running:
         screen.blit(Player.surf, (100, 2*ymax//3 + vert))
         
         if position%50==0:
-            trash.append(Obstacle(sprites,xmax,randrange(0, ymax-100, 100),-5))
+            trash.append(Obstacle(sprites,xmax,randrange(0, ymax-100, 50),-5))
         for obj in trash:
             obj.v = value
             obj.move(dt)
