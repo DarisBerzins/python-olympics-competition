@@ -34,16 +34,16 @@ running = True
 trash = [Obstacle(sprites,np.array([2*xmax,randrange(0, ymax-100, 50)]), 0)]
 trashinterval = xmax
 
-Player = player()
+player = Player()
+fps = Text('fps', None, 24, (255, 255, 255))
+speed = Text('speed', None, 24, (255, 255, 255))
+
 while running:
     t = 0.001 * pg.time.get_ticks()
     dt = min(t-t0, maxdt)
     if dt > 0.0:
         clock.tick()
         t0 = t
-
-        fpsImage = font.render("FPS: " + str(int(clock.get_fps())), True, (255, 255, 255))
-        speedImage = font.render("Speed: " + str(Player.vel[0]), True, (255, 255, 255))
 
         for event in pg.event.get(pump=True):
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
@@ -63,58 +63,54 @@ while running:
                     case pg.K_d: pressedKeys.d = False
                     case pg.K_a: pressedKeys.a = False
 
-        Player.vel[1] = 0
+        player.vel[1] = 0
         if (pressedKeys.right and pressedKeys.left) or (pressedKeys.left and pressedKeys.d) or (pressedKeys.right and pressedKeys.a) or (pressedKeys.a and pressedKeys.d):
             pass
         elif pressedKeys.right and pressedKeys.d:
             if not flag:
-                Player.vel[0] -= 50
+                player.vel[0] -= 50
                 startTime = pg.time.get_ticks()
             flag = True
-            Player.vel[1] = startTime*100/(pg.time.get_ticks())
+            player.vel[1] = startTime*100/(pg.time.get_ticks())
         elif pressedKeys.left and pressedKeys.a:
             if flag:
-                Player.vel[0] -= 50
+                player.vel[0] -= 50
                 startTime = pg.time.get_ticks()
             flag = False
-            Player.vel[1] = -startTime*100/(pg.time.get_ticks())
+            player.vel[1] = -startTime*100/(pg.time.get_ticks())
 
         timeStep += dt
         if timeStep > 0.1:
             timeStep = 0.0
-            if Player.vel[0] < -5:
-                Player.vel[0] += 5
-                Player.vel[0] //= 1.1
-            elif Player.vel[0] > -5:
-                Player.vel[0] = -5     
+            if player.vel[0] < -5:
+                player.vel[0] += 5
+                player.vel[0] //= 1.1
+            elif player.vel[0] > -5:
+                player.vel[0] = -5     
 
-        Player.pos = Player.pos + Player.vel * dt
-        # print(Player.pos[1], Player.vel[1])
+        player.pos = player.pos + player.vel * dt
 
-        bgRect.left = Player.pos[0] % xmax - xmax
-        bgRect2.left = Player.pos[0] % xmax
+        bgRect.left = player.pos[0] % xmax - xmax
+        bgRect2.left = player.pos[0] % xmax
         
         screen.blit(background, bgRect)
         screen.blit(background, bgRect2)
 
-        screen.blit(fpsImage, (20, 20))
-        screen.blit(speedImage, (xmax-100, 20))
-        # print(Player.pos, Player.vel)
-        # screen.blit(Player.sprite, (100, Player.pos[1]))
-        Player.draw(screen)
-
         for obj in trash:
-            obj.pos[0] = xmax-(obj.initialpos-Player.pos[0])
+            obj.pos[0] = xmax-(obj.initialpos-player.pos[0])
             obj.draw(screen)
-            collide = pg.Rect.colliderect(Player.hitbox, obj.hitbox)
+            collide = pg.Rect.colliderect(player.hitbox, obj.hitbox)
             if collide: 
                 obj.color = (0,255,0)
-        dist = (xmax-(obj.initialpos-Player.pos[0]))
+        dist = (xmax-(obj.initialpos-player.pos[0]))
         if (xmax - trash[-1].pos[0] > trashinterval):
-            trash.append(Obstacle(sprites,np.array([xmax,randrange(0, ymax-100, 50)]), Player.pos[0]))
+            trash.append(Obstacle(sprites,np.array([xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+
+        player.draw(screen)
+
+        fps.draw(clock.get_fps(), (20, 20), screen)
+        speed.draw(np.linalg.norm(player.vel), (xmax-100, 20), screen)
+
         pg.display.flip()
+
 pg.quit()
-
-
-
-

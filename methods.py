@@ -9,7 +9,7 @@ class pressedKeys():
     a = False
     d = False
 
-class player():
+class Player():
     pos = np.array([0, 300])
     vel = np.array([0, 0])
     frame = 0
@@ -44,6 +44,19 @@ class Obstacle():
         self.hitbox.topleft = self.pos
         pg.draw.rect(screen, self.color, self.hitbox)
         screen.blit(self.sprite,self.pos)
+
+class Text():
+    def __init__(self, type: str, font, fontSize: int, color):
+        self.type = type
+        self.font = pg.font.SysFont(font, fontSize)
+        self.color = color
+
+    def draw(self, value, position, screen):
+        if self.type == 'fps':
+            self.image = self.font.render("FPS: " + str(int(value)), True, self.color)
+        elif self.type == 'speed':
+            self.image = self.font.render("Speed: " + str(int(value)), True, self.color)
+        screen.blit(self.image, position)
 
 #methods
 def InitPygame():
