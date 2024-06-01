@@ -38,6 +38,8 @@ player = Player()
 fps = Text('fps', None, 24, (255, 255, 255))
 speed = Text('speed', None, 24, (255, 255, 255))
 
+minvel = 500
+
 while running:
     t = 0.001 * pg.time.get_ticks()
     dt = min(t-t0, maxdt)
@@ -82,11 +84,11 @@ while running:
         timeStep += dt
         if timeStep > 0.1:
             timeStep = 0.0
-            if player.vel[0] < -5:
-                player.vel[0] += 5
+            if player.vel[0] < -minvel:
+                player.vel[0] += minvel
                 player.vel[0] //= 1.1
-            elif player.vel[0] > -5:
-                player.vel[0] = -5     
+            elif player.vel[0] > -minvel:
+                player.vel[0] = -minvel     
 
         player.pos = player.pos + player.vel * dt
 
@@ -99,9 +101,12 @@ while running:
         for obj in trash:
             obj.pos[0] = xmax-(obj.initialpos-player.pos[0])
             obj.draw(screen)
-            collide = pg.Rect.colliderect(player.hitbox, obj.hitbox)
+            # collide = pg.Rect.colliderect(player.hitbox, obj.hitbox)
+            collide = obj.mask.overlap(player.mask,(100 - obj.pos[0], player.pos[1] - obj.pos[1]))
+
             if collide: 
                 obj.color = (0,255,0)
+ 
         dist = (xmax-(obj.initialpos-player.pos[0]))
         if (xmax - trash[-1].pos[0] > trashinterval):
             trash.append(Obstacle(sprites,np.array([xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
