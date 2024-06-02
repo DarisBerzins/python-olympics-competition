@@ -70,9 +70,6 @@ class Text():
 #methods
 def InitPygame():
     pg.init()
-    pg.display.set_caption("Balls")
-
-#functions
-def placeholder():
-    return True
-    
+    pg.display.set_caption("THE MOST FRENCH EXPERIENCE")
+    icon = pg.image.load('assets/french_flag.png')
+    pg.display.set_icon(icon)
