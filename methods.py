@@ -27,7 +27,7 @@ class Player():
     # hitbox.height -= 20
     def draw(self,screen):
         self.hitbox.topleft = (100, self.pos[1])
-        pg.draw.rect(screen, (255, 0, 0), self.hitbox)
+        # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
         screen.blit(self.sprite,(100, self.pos[1])) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
         
         # screen.blit(self.mask,(100, self.pos[1]))
@@ -35,9 +35,10 @@ class Player():
 class Obstacle():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
     color = (255, 0, 0)
-    def __init__(self,sprites,pos,initialpos):
+    def __init__(self,sprites,sounds,pos,initialpos):
         self.random = randrange(0,len(sprites))
         self.sprite = sprites[self.random]
+        sounds[self.random].play()
         self.sprite = pg.transform.scale_by(self.sprite, 1)
         self.pos = pos
         self.initialpos = initialpos
@@ -48,7 +49,7 @@ class Obstacle():
     #     self.x += self.v*dt
     def draw(self,screen):
         self.hitbox.topleft = self.pos
-        pg.draw.rect(screen, self.color, self.hitbox)
+        # pg.draw.rect(screen, self.color, self.hitbox)
         screen.blit(self.sprite,self.pos)
     
         # screen.blit(self.mask, self.pos)

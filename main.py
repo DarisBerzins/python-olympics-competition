@@ -25,13 +25,18 @@ bgRect2 = background.get_rect()
 
 font = pg.font.SysFont(None, 24)
 
-dir = "assets/trash"
 sprites = []
-for file in os.listdir(dir):
-    sprites.append(pg.image.load(os.path.join(dir,file)))
+for file in os.listdir("assets/trash"):
+    sprites.append(pg.image.load(os.path.join("assets/trash",file)))
+
+sounds = []
+for file in os.listdir("assets/trash_sounds"):
+    snd = pg.mixer.Sound(os.path.join("assets/trash_sounds",file))
+    snd.set_volume(0.25)
+    sounds.append(snd)
 
 running = True
-trash = [Obstacle(sprites,np.array([2*xmax,randrange(0, ymax-100, 50)]), 0)]
+trash = [Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
 trashinterval = xmax
 
 player = Player()
@@ -109,7 +114,7 @@ while running:
  
         dist = (xmax-(obj.initialpos-player.pos[0]))
         if (xmax - trash[-1].pos[0] > trashinterval):
-            trash.append(Obstacle(sprites,np.array([xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+            trash.append(Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
 
         player.draw(screen)
 
