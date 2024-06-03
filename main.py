@@ -73,19 +73,23 @@ while running:
 
         player.vel[1] = 0
         if (pressedKeys.right and pressedKeys.left) or (pressedKeys.left and pressedKeys.d) or (pressedKeys.right and pressedKeys.a) or (pressedKeys.a and pressedKeys.d):
-            pass
+            player.frame = 0
         elif pressedKeys.right and pressedKeys.d:
             if not flag:
                 player.vel[0] -= 50
                 startTime = pg.time.get_ticks()
+                player.frame = 2
             flag = True
             player.vel[1] = startTime*100/(pg.time.get_ticks())
         elif pressedKeys.left and pressedKeys.a:
             if flag:
                 player.vel[0] -= 50
                 startTime = pg.time.get_ticks()
+                player.frame = 1
             flag = False
             player.vel[1] = -startTime*100/(pg.time.get_ticks())
+        else:
+            player.frame = 0
 
         timeStep += dt
         if timeStep > 0.1:

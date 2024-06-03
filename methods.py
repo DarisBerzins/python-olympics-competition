@@ -32,23 +32,19 @@ class animatedSurface():
 class Player():
     pos = np.array([0, 300])
     vel = np.array([0, 0])
+    folderdir = 'assets/kayak'
+    sprites = []
     frame = 0
-    if frame == 0:
-        sprite = pg.image.load("assets/testboat.png")
-        sprite =  pg.transform.scale_by(sprite, 1.25)
-    elif frame == 1:
-        pass #make this the right stroke sprite
-    elif frame == 2:
-        pass #make this the left stroke sprite
-    elif frame == 3:
-        pass #make this the destroyed boat sprite
-    hitbox = sprite.get_rect()
-    mask = pg.mask.from_surface(sprite)
+    for file in os.listdir(folderdir):
+        sprites.append(pg.transform.scale_by(pg.image.load(os.path.join(folderdir, file)), 2.2))
+    hitboxSprite = pg.image.load("assets/kayak-no-paddles.png")
+    hitbox = hitboxSprite.get_rect()
+    mask = pg.mask.from_surface(hitboxSprite)
     # hitbox.height -= 20
     def draw(self,screen):
         self.hitbox.topleft = (100, self.pos[1])
         # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
-        screen.blit(self.sprite,(100, self.pos[1])) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
+        screen.blit(self.sprites[self.frame],(100, self.pos[1])) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
         
         # screen.blit(self.mask,(100, self.pos[1]))
 
