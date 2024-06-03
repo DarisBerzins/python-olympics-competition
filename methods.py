@@ -9,6 +9,26 @@ class pressedKeys():
     a = False
     d = False
 
+class animatedSurface():
+    sprites = []
+    def __init__(self,folderdir, delay):
+        for file in os.listdir(folderdir):
+            self.sprites.append(pg.image.load(os.path.join(folderdir,file)))
+        self.counter = 0
+        self.frames = 0
+        self.delay = delay
+    def update(self):
+        current = self.sprites[self.counter]
+        self.frames += 1
+        if self.frames >= self.delay:
+            self.frames = 0
+            self.counter += 1
+        if self.counter > len(self.sprites)-1:
+            self.counter = 0
+        return current
+        
+        
+
 class Player():
     pos = np.array([0, 300])
     vel = np.array([0, 0])
@@ -38,12 +58,12 @@ class Obstacle():
     def __init__(self,sprites,sounds,pos,initialpos):
         self.random = randrange(0,len(sprites))
         self.sprite = sprites[self.random]
-        sounds[self.random].play()
         self.sprite = pg.transform.scale_by(self.sprite, 1)
         self.pos = pos
         self.initialpos = initialpos
         self.hitbox = self.sprite.get_rect()
         self.mask = pg.mask.from_surface(self.sprite)
+        self.sounded = False
     
     # def move(self,dt):
     #     self.x += self.v*dt

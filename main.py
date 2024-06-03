@@ -19,9 +19,10 @@ timeStep = 0.0
 flag = False
 startTime = 0
 
-background = pg.image.load("assets/test-image.png")
-bgRect = background.get_rect()
-bgRect2 = background.get_rect()
+background = animatedSurface("assets/bg", 20) #initialize the animation for the background
+bg = background.update()
+bgRect = bg.get_rect()
+bgRect2 = bg.get_rect()
 
 font = pg.font.SysFont(None, 24)
 
@@ -43,7 +44,7 @@ player = Player()
 fps = Text('fps', None, 24, (255, 255, 255))
 speed = Text('speed', None, 24, (255, 255, 255))
 
-minvel = 500
+minvel = 5
 
 while running:
     t = 0.001 * pg.time.get_ticks()
@@ -100,8 +101,9 @@ while running:
         bgRect.left = player.pos[0] % xmax - xmax
         bgRect2.left = player.pos[0] % xmax
         
-        screen.blit(background, bgRect)
-        screen.blit(background, bgRect2)
+        bg = background.update()
+        screen.blit(bg, bgRect)
+        screen.blit(bg, bgRect2)
 
         for obj in trash:
             obj.pos[0] = xmax-(obj.initialpos-player.pos[0])
@@ -111,6 +113,11 @@ while running:
 
             if collide: 
                 obj.color = (0,255,0)
+                if not obj.sounded:
+                    sounds[obj.random].play()
+                    obj.sounded = True
+            else:
+                obj.sounded = False
  
         dist = (xmax-(obj.initialpos-player.pos[0]))
         if (xmax - trash[-1].pos[0] > trashinterval):
