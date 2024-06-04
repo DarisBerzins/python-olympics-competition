@@ -10,4 +10,5 @@
 * Border for water
 * Background music?
 * Finish boat asset - spashes
-* 
+* Finish line
+* Powerups?
