@@ -28,11 +28,15 @@ class animatedSurface():
         return current
 
 class Player():
-    pos = np.array([0, 300])
-    vel = np.array([0, 0])
+    pos = np.array([0.0, 300.0])
+    vel = np.array([-1.0, 0.0])
+    accel = np.array([0.0, 0.0])
+    polarVel = np.array([0.0, 0.0])
+    mass = 1
     folderdir = 'assets/kayak'
     sprites = []
     rotatedSprites = []
+    rotatedHitboxes = []
     angle = 20
     frame = 0
     for file in os.listdir(folderdir):
@@ -42,16 +46,21 @@ class Player():
         for angleRange in range(0, 361):
             tempList.append(pg.transform.rotate(sprites[i], angleRange))
         rotatedSprites.append(tempList)
+    
     hitboxSprite = pg.image.load("assets/kayak-no-paddles.png")
     hitbox = hitboxSprite.get_rect()
+    for i in range(0, 361):
+        rotatedHitboxes.append(pg.transform.rotate(hitboxSprite, i))
     mask = pg.mask.from_surface(hitboxSprite)
     # hitbox.height -= 20
     def draw(self,screen):
-        self.angle = -int(np.arctan2(self.vel[1], self.vel[0])*5)
+        self.angle = -int(np.degrees(np.arctan2(self.vel[1], -self.vel[0])))
         self.hitbox = self.rotatedSprites[self.frame][self.angle].get_rect()
         self.hitbox.center = (200, self.pos[1])
-        pg.draw.rect(screen, (255, 0, 0), self.hitbox)
-        screen.blit(self.rotatedSprites[self.frame][self.angle], self.hitbox)        
+        self.mask = pg.mask.from_surface(self.rotatedHitboxes[self.angle])
+        # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
+        screen.blit(self.rotatedSprites[self.frame][self.angle], self.hitbox)  
+        # print(self.vel)      
         # screen.blit(self.mask,(100, self.pos[1]))
 
 class Obstacle():

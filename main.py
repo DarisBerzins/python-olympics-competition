@@ -46,6 +46,9 @@ speed = Text('speed', None, 24, (255, 255, 255))
 angleText = Text('angle', None, 24, (255, 255, 255))
 
 minvel = 5
+speedBoostOnPress = 1000
+vertSpeedOnPress = 0.03
+
 
 while running:
     t = 0.001 * pg.time.get_ticks()
@@ -72,36 +75,38 @@ while running:
                     case pg.K_d: pressedKeys.d = False
                     case pg.K_a: pressedKeys.a = False
 
-        player.vel[1] = 0
+        player.polarVel[0] = np.linalg.norm(player.vel)
+        player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
+        print(player.polarVel)
+
         if (pressedKeys.right and pressedKeys.left) or (pressedKeys.left and pressedKeys.d) or (pressedKeys.right and pressedKeys.a) or (pressedKeys.a and pressedKeys.d):
             player.frame = 0
         elif pressedKeys.right and pressedKeys.d:
             if not flag:
-                player.vel[0] -= 50
-                startTime = pg.time.get_ticks()
+                print("right")
+                player.polarVel[0] += speedBoostOnPress
                 player.frame = 2
             flag = True
-            player.vel[1] = startTime*100/(pg.time.get_ticks())
+            player.polarVel[1] += vertSpeedOnPress
         elif pressedKeys.left and pressedKeys.a:
             if flag:
-                player.vel[0] -= 50
-                startTime = pg.time.get_ticks()
+                print("left")
+                player.polarVel += speedBoostOnPress
                 player.frame = 1
             flag = False
-            player.vel[1] = -startTime*100/(pg.time.get_ticks())
+            player.polarVel[1] -= vertSpeedOnPress
         else:
             player.frame = 0
 
-        timeStep += dt
-        if timeStep > 0.1:
-            timeStep = 0.0
-            if player.vel[0] < -minvel:
-                player.vel[0] += minvel
-                player.vel[0] //= 1.1
-            elif player.vel[0] > -minvel:
-                player.vel[0] = -minvel     
+        player.vel[0] = -np.cos(player.polarVel[1])*player.polarVel[0]
+        player.vel[1] = np.sin(player.polarVel[1])*player.polarVel[0]
 
+        player.accel -= player.vel
+
+        player.vel = player.vel + player.accel * dt
         player.pos = player.pos + player.vel * dt
+
+        player.accel = np.array([0.0,  0.0])
 
         bgRect.left = player.pos[0] % xmax - xmax
         bgRect2.left = player.pos[0] % xmax
@@ -114,7 +119,7 @@ while running:
             obj.pos[0] = xmax-(obj.initialpos-player.pos[0])
             obj.draw(screen)
             # collide = pg.Rect.colliderect(player.hitbox, obj.hitbox)
-            collide = obj.mask.overlap(player.mask,(100 - obj.pos[0], player.pos[1] - obj.pos[1]))
+            collide = obj.mask.overlap(player.mask,(200 - obj.pos[0], player.pos[1] - obj.pos[1]))
 
             if collide: 
                 obj.color = (0,255,0)
