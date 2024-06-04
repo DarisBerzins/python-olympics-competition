@@ -13,3 +13,5 @@
 * Finish line
 * Start line or countdown to starts
 * Powerups?
+
+## Comment all code when finished
