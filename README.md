@@ -11,4 +11,5 @@
 * Background music?
 * Finish boat asset - spashes
 * Finish line
+* Start line or countdown to starts
 * Powerups?
