@@ -26,26 +26,32 @@ class animatedSurface():
         if self.counter > len(self.sprites)-1:
             self.counter = 0
         return current
-        
-        
 
 class Player():
     pos = np.array([0, 300])
     vel = np.array([0, 0])
     folderdir = 'assets/kayak'
     sprites = []
+    rotatedSprites = []
+    angle = 20
     frame = 0
     for file in os.listdir(folderdir):
         sprites.append(pg.transform.scale_by(pg.image.load(os.path.join(folderdir, file)), 2.2))
+    for i in range(len(sprites)):
+        tempList = []
+        for angleRange in range(0, 361):
+            tempList.append(pg.transform.rotate(sprites[i], angleRange))
+        rotatedSprites.append(tempList)
     hitboxSprite = pg.image.load("assets/kayak-no-paddles.png")
     hitbox = hitboxSprite.get_rect()
     mask = pg.mask.from_surface(hitboxSprite)
     # hitbox.height -= 20
     def draw(self,screen):
-        self.hitbox.topleft = (100, self.pos[1])
-        # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
-        screen.blit(self.sprites[self.frame],(100, self.pos[1])) #store the position in the class lol (do it)!!!!!!!!!!!!!!!!!!!!!11
-        
+        self.angle = -int(np.arctan2(self.vel[1], self.vel[0])*5)
+        self.hitbox = self.rotatedSprites[self.frame][self.angle].get_rect()
+        self.hitbox.center = (200, self.pos[1])
+        pg.draw.rect(screen, (255, 0, 0), self.hitbox)
+        screen.blit(self.rotatedSprites[self.frame][self.angle], self.hitbox)        
         # screen.blit(self.mask,(100, self.pos[1]))
 
 class Obstacle():
@@ -81,6 +87,8 @@ class Text():
             self.image = self.font.render("FPS: " + str(int(value)), True, self.color)
         elif self.type == 'speed':
             self.image = self.font.render("Speed: " + str(int(value)), True, self.color)
+        elif self.type == 'angle':
+            self.image = self.font.render("Angle: " + str(int(value)), True, self.color)
         screen.blit(self.image, position)
 
 #methods

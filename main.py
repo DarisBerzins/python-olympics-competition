@@ -43,6 +43,7 @@ trashinterval = xmax
 player = Player()
 fps = Text('fps', None, 24, (255, 255, 255))
 speed = Text('speed', None, 24, (255, 255, 255))
+angleText = Text('angle', None, 24, (255, 255, 255))
 
 minvel = 5
 
@@ -131,6 +132,7 @@ while running:
 
         fps.draw(clock.get_fps(), (20, 20), screen)
         speed.draw(np.linalg.norm(player.vel), (xmax-100, 20), screen)
+        angleText.draw(player.angle, (20, ymax-20), screen)
 
         pg.display.flip()
 
