@@ -50,7 +50,10 @@ minvel = 5
 speedBoostOnPress = 350
 angularVelocity = 1.8
 trailSpeed = 400
-
+resetTime = 500 #milliseconds
+resetTimer = -1
+firstReset = True
+allowAnyKey = True
 
 while running:
     t = 0.001 * pg.time.get_ticks()
@@ -84,13 +87,15 @@ while running:
             # player.frame = 0
             player.polarVel[0] -= min(speedBoostOnPress//6, player.polarVel[0]//8)
         elif keysNsprites.right and keysNsprites.d:
-            if not flag:
+            if not flag or allowAnyKey:
+                allowAnyKey = False
                 player.polarVel[0] += speedBoostOnPress
                 # player.frame = 1
             flag = True
             player.polarVel[1] += angularVelocity * dt
         elif keysNsprites.left and keysNsprites.a:
-            if flag:
+            if flag or allowAnyKey:
+                allowAnyKey = False
                 player.polarVel[0] += speedBoostOnPress
                 # player.frame = 2
             flag = False
@@ -99,6 +104,17 @@ while running:
             # player.frame = 0
             pass
         
+        if not any([keysNsprites.left, keysNsprites.right, keysNsprites.a, keysNsprites.d]):
+            if firstReset:
+                resetTimer = pg.time.get_ticks()
+                firstReset = False
+            currentDelta = pg.time.get_ticks() - resetTimer
+        else:
+            firstReset = True
+            currentDelta = 0
+        if not any([keysNsprites.left, keysNsprites.right, keysNsprites.a, keysNsprites.d]) and currentDelta > resetTime:
+            allowAnyKey = True
+
         if player.polarVel[0] >= 400:
             keysNsprites.trailState = True
         else: keysNsprites.trailState = False
