@@ -37,7 +37,7 @@ for file in os.listdir("assets/trash_sounds"):
     sounds.append(snd)
 
 running = True
-deathMenu = False
+dM_run = True
 trash = [Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
 trashinterval = xmax
 
@@ -184,7 +184,6 @@ while running:
             f.write("\n" + playerName + "\t" + str(round(runtime,3)))
             f.close()
             running = False
-            dM_run = True
 
 def deathMenu(dM):
     scores = []
