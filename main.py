@@ -191,15 +191,23 @@ def deathMenu(dM):
     f = open("scores.txt","r")
     for line in f:
         elements = line.split("\t")
-        print(elements)
+        # print(elements)
         score = [elements[0], float(elements[1])]
         scores.append(score)
     f.close()
-    
+    scoreboard_rect = pg.Rect(0,0,600,600)
+    scoreboard_rect.center = (xmax/2,ymax/2)
+    pg.draw.rect(screen, (255,255,255), scoreboard_rect)
     scores.sort(key = lambda x: x[1])
-    print(scores)
-    # for line in scores:
-    #     screen.blit
+    # print(scores)
+    step = 100
+    pos = 1
+    for line in scores:
+        txt = Text("string", "assets/power_pixel-7.ttf", 16, (0,0,0))
+        txt.draw(str(pos)+". "+line[0]+" "+str(line[1]), (xmax/2, step),screen)
+        step += 25
+        pos += 1
+    
     while dM:
         for event in pg.event.get(pump=True):
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
