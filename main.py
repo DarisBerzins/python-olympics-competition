@@ -46,7 +46,6 @@ fps = Text('fps', None, 24, (255, 255, 255))
 speed = Text('speed', None, 24, (255, 255, 255))
 angleText = Text('angle', None, 24, (255, 255, 255))
 
-minvel = 5
 speedBoostOnPress = 350
 angularVelocity = 1.8
 trailSpeed = 400
