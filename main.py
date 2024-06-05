@@ -41,6 +41,7 @@ trash = [Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)])
 trashinterval = xmax
 
 player = Player()
+keysNsprites = boatState()
 fps = Text('fps', None, 24, (255, 255, 255))
 speed = Text('speed', None, 24, (255, 255, 255))
 angleText = Text('angle', None, 24, (255, 255, 255))
@@ -48,6 +49,7 @@ angleText = Text('angle', None, 24, (255, 255, 255))
 minvel = 5
 speedBoostOnPress = 350
 angularVelocity = 1.8
+trailSpeed = 400
 
 
 while running:
@@ -63,37 +65,45 @@ while running:
             
             if event.type == pg.KEYDOWN:
                 match event.key:
-                    case pg.K_RIGHT: pressedKeys.right = True
-                    case pg.K_LEFT: pressedKeys.left = True
-                    case pg.K_d: pressedKeys.d = True
-                    case pg.K_a: pressedKeys.a = True
+                    case pg.K_RIGHT: keysNsprites.right = True
+                    case pg.K_LEFT: keysNsprites.left = True
+                    case pg.K_d: keysNsprites.d = True
+                    case pg.K_a: keysNsprites.a = True
             
             if event.type == pg.KEYUP:
                 match event.key:
-                    case pg.K_RIGHT: pressedKeys.right = False
-                    case pg.K_LEFT: pressedKeys.left = False
-                    case pg.K_d: pressedKeys.d = False
-                    case pg.K_a: pressedKeys.a = False
+                    case pg.K_RIGHT: keysNsprites.right = False
+                    case pg.K_LEFT: keysNsprites.left = False
+                    case pg.K_d: keysNsprites.d = False
+                    case pg.K_a: keysNsprites.a = False
 
         player.polarVel[0] = np.linalg.norm(player.vel)
         player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
 
-        if (pressedKeys.right and pressedKeys.left) or (pressedKeys.left and pressedKeys.d) or (pressedKeys.right and pressedKeys.a) or (pressedKeys.a and pressedKeys.d):
-            player.frame = 0
-        elif pressedKeys.right and pressedKeys.d:
+        if (keysNsprites.right and keysNsprites.left) or (keysNsprites.left and keysNsprites.d) or (keysNsprites.right and keysNsprites.a) or (keysNsprites.a and keysNsprites.d):
+            # player.frame = 0
+            pass
+        elif keysNsprites.right and keysNsprites.d:
             if not flag:
                 player.polarVel[0] += speedBoostOnPress
-                player.frame = 1
+                # player.frame = 1
             flag = True
             player.polarVel[1] += angularVelocity * dt
-        elif pressedKeys.left and pressedKeys.a:
+        elif keysNsprites.left and keysNsprites.a:
             if flag:
                 player.polarVel[0] += speedBoostOnPress
-                player.frame = 2
+                # player.frame = 2
             flag = False
             player.polarVel[1] -= angularVelocity * dt
         else:
-            player.frame = 0
+            # player.frame = 0
+            pass
+        
+        if player.polarVel[0] >= 400:
+            keysNsprites.trailState = True
+        else: keysNsprites.trailState = False
+        print(keysNsprites.left, keysNsprites.right, keysNsprites.a, keysNsprites.d, keysNsprites.trailState)
+        player.frame = keysNsprites.selectSprite()
 
         player.vel[0] = -np.cos(player.polarVel[1])*player.polarVel[0]
         player.vel[1] = np.sin(player.polarVel[1])*player.polarVel[0]

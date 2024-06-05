@@ -3,15 +3,34 @@ import pygame as pg
 from random import randrange
 import os
 
-class pressedKeys():
-    left = False
-    right = False
-    a = False
-    d = False
+class boatState():
+    
+    def __init__(self):
+        self.left = False
+        self.right = False
+        self.a = False
+        self.d = False
+        self.trailState = False
+    
+    def selectSprite(self): #0 is left, 1 is none, 2 is right
+        if self.right == self.left: self.rearState = 1
+        elif self.left: self.rearState = 2
+        elif self.right: self.rearState = 0
+
+        if self.a == self.d: self.frontState = 1
+        elif self.a: self.frontState = 2
+        elif self.d: self.frontState = 0
+
+        if self.trailState:
+            # print(3 * self.rearState + self.frontState + 1, self.trailState)
+            return 3 * self.rearState + self.frontState + 1
+        else:
+            # print(10 + 3 * self.rearState + self.frontState, self.trailState)
+            return 10 + 3 * self.rearState + self.frontState
 
 class animatedSurface():
     sprites = []
-    def __init__(self,folderdir, delay):
+    def __init__(self, folderdir, delay):
         for file in os.listdir(folderdir):
             self.sprites.append(pg.image.load(os.path.join(folderdir,file)))
         self.counter = 0
@@ -54,11 +73,13 @@ class Player():
     mask = pg.mask.from_surface(hitboxSprite)
     # hitbox.height -= 20
     def draw(self,screen):
+        
         self.angle = -int(np.degrees(np.arctan2(self.vel[1], -self.vel[0])))
         self.hitbox = self.rotatedSprites[self.frame][self.angle].get_rect()
         self.hitbox.center = (200, self.pos[1])
         self.mask = pg.mask.from_surface(self.rotatedHitboxes[self.angle])
         # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
+        if self.frame == 0: self.angle = 0
         screen.blit(self.rotatedSprites[self.frame][self.angle], self.hitbox)  
         # print(self.vel)      
         # screen.blit(self.mask,(100, self.pos[1]))
@@ -106,11 +127,3 @@ def InitPygame():
     pg.display.set_caption("THE MOST FRENCH EXPERIENCE")
     icon = pg.image.load('assets/french_flag.png')
     pg.display.set_icon(icon)
-
-def selectSprite(frontState: int, rearState, trailState): #0 is left, 1 is none, 2 is right
-    if not trailState:
-        if frontState == 1 and rearState == 1:
-            return 2
-        
-    else:
-        pass
