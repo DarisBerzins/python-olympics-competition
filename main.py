@@ -190,7 +190,7 @@ def deathMenu(dM):
     scores = []
     f = open("scores.txt","r")
     for line in f:
-        elements = line.split()
+        elements = line.split("\t")
         print(elements)
         score = [elements[0], float(elements[1])]
         scores.append(score)
@@ -198,7 +198,8 @@ def deathMenu(dM):
     
     scores.sort(key = lambda x: x[1])
     print(scores)
-
+    for line in scores:
+        screen.blit
     while dM:
         for event in pg.event.get(pump=True):
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
