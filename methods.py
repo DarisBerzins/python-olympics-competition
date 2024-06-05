@@ -106,3 +106,11 @@ def InitPygame():
     pg.display.set_caption("THE MOST FRENCH EXPERIENCE")
     icon = pg.image.load('assets/french_flag.png')
     pg.display.set_icon(icon)
+
+def selectSprite(frontState: int, rearState, trailState): #0 is left, 1 is none, 2 is right
+    if not trailState:
+        if frontState == 1 and rearState == 1:
+            return 2
+        
+    else:
+        pass
