@@ -82,7 +82,7 @@ while running:
 
         if (keysNsprites.right and keysNsprites.left) or (keysNsprites.left and keysNsprites.d) or (keysNsprites.right and keysNsprites.a) or (keysNsprites.a and keysNsprites.d):
             # player.frame = 0
-            pass
+            player.polarVel[0] -= min(speedBoostOnPress//6, player.polarVel[0]//8)
         elif keysNsprites.right and keysNsprites.d:
             if not flag:
                 player.polarVel[0] += speedBoostOnPress
