@@ -46,8 +46,8 @@ speed = Text('speed', None, 24, (255, 255, 255))
 angleText = Text('angle', None, 24, (255, 255, 255))
 
 minvel = 5
-speedBoostOnPress = 1000
-vertSpeedOnPress = 0.03
+speedBoostOnPress = 350
+angularVelocity = 1.8
 
 
 while running:
@@ -77,24 +77,21 @@ while running:
 
         player.polarVel[0] = np.linalg.norm(player.vel)
         player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
-        print(player.polarVel)
 
         if (pressedKeys.right and pressedKeys.left) or (pressedKeys.left and pressedKeys.d) or (pressedKeys.right and pressedKeys.a) or (pressedKeys.a and pressedKeys.d):
             player.frame = 0
         elif pressedKeys.right and pressedKeys.d:
             if not flag:
-                print("right")
                 player.polarVel[0] += speedBoostOnPress
-                player.frame = 2
+                player.frame = 1
             flag = True
-            player.polarVel[1] += vertSpeedOnPress
+            player.polarVel[1] += angularVelocity * dt
         elif pressedKeys.left and pressedKeys.a:
             if flag:
-                print("left")
-                player.polarVel += speedBoostOnPress
-                player.frame = 1
+                player.polarVel[0] += speedBoostOnPress
+                player.frame = 2
             flag = False
-            player.polarVel[1] -= vertSpeedOnPress
+            player.polarVel[1] -= angularVelocity * dt
         else:
             player.frame = 0
 
