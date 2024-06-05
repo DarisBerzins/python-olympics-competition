@@ -106,10 +106,21 @@ class Obstacle():
     
         # screen.blit(self.mask, self.pos)
 
+class startNfinish():
+    def __init__(self, startpos, lengthofTrack):
+        self.startpos = startpos
+        self.finishpos = self.startpos - lengthofTrack
+        # self.initialpos = initialpos
+    def draw(self, screen):
+        pg.draw.rect(screen, (255,0,0), pg.Rect(self.startpos,0,100,screen.get_size()[0])) #doesn't work
+    
+    
+
+
 class Text():
     def __init__(self, type: str, font, fontSize: int, color):
         self.type = type
-        self.font = pg.font.SysFont(font, fontSize)
+        self.font = pg.font.Font(font, fontSize)
         self.color = color
 
     def draw(self, value, position, screen):
@@ -119,7 +130,12 @@ class Text():
             self.image = self.font.render("Speed: " + str(int(value)), True, self.color)
         elif self.type == 'angle':
             self.image = self.font.render("Angle: " + str(int(value)), True, self.color)
-        screen.blit(self.image, position)
+        elif self.type == 'Runtime':
+            self.image = self.font.render("Run time: " + str(round(value,3)), True, self.color)
+        elif self.type == 'string':
+            self.image = self.font.render(value, True, self.color)
+        self.rect = self.image.get_rect(center = position)
+        screen.blit(self.image, self.rect)
 
 #methods
 def InitPygame():
