@@ -68,6 +68,7 @@ def runGame():
     firstReset = True
     allowAnyKey = True
     textBoxCreated = False
+    pastFinish = False
 
     while running:
         pg.display.flip()
@@ -83,43 +84,39 @@ def runGame():
                 
                 for i in textBoxes: i.handleEvent(event)
 
-                if event.type == pg.KEYDOWN:
-                    match event.key:
-                        case pg.K_RIGHT: keysNsprites.right = True
-                        case pg.K_LEFT: keysNsprites.left = True
-                        case pg.K_d: keysNsprites.d = True
-                        case pg.K_a: keysNsprites.a = True
-                
-                if event.type == pg.KEYUP:
-                    match event.key:
-                        case pg.K_RIGHT: keysNsprites.right = False
-                        case pg.K_LEFT: keysNsprites.left = False
-                        case pg.K_d: keysNsprites.d = False
-                        case pg.K_a: keysNsprites.a = False
+                if not pastFinish:
+                    if event.type == pg.KEYDOWN:
+                        match event.key:
+                            case pg.K_RIGHT: keysNsprites.right = True
+                            case pg.K_LEFT: keysNsprites.left = True
+                            case pg.K_d: keysNsprites.d = True
+                            case pg.K_a: keysNsprites.a = True
+                    
+                    if event.type == pg.KEYUP:
+                        match event.key:
+                            case pg.K_RIGHT: keysNsprites.right = False
+                            case pg.K_LEFT: keysNsprites.left = False
+                            case pg.K_d: keysNsprites.d = False
+                            case pg.K_a: keysNsprites.a = False
 
             player.polarVel[0] = np.linalg.norm(player.vel)
             player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
 
-            if (keysNsprites.right and keysNsprites.left) or (keysNsprites.left and keysNsprites.d) or (keysNsprites.right and keysNsprites.a) or (keysNsprites.a and keysNsprites.d):
-                # player.frame = 0
-                player.polarVel[0] -= min(speedBoostOnPress//4, player.polarVel[0]//6)
-            elif keysNsprites.right and keysNsprites.d:
-                if not flag or allowAnyKey:
-                    allowAnyKey = False
-                    player.polarVel[0] += speedBoostOnPress
-                    # player.frame = 1
-                flag = True
-                player.polarVel[1] += angularVelocity * dt
-            elif keysNsprites.left and keysNsprites.a:
-                if flag or allowAnyKey:
-                    allowAnyKey = False
-                    player.polarVel[0] += speedBoostOnPress
-                    # player.frame = 2
-                flag = False
-                player.polarVel[1] -= angularVelocity * dt
-            else:
-                # player.frame = 0
-                pass
+            if not pastFinish:
+                if (keysNsprites.right and keysNsprites.left) or (keysNsprites.left and keysNsprites.d) or (keysNsprites.right and keysNsprites.a) or (keysNsprites.a and keysNsprites.d):
+                    player.polarVel[0] -= min(speedBoostOnPress//4, player.polarVel[0]//6)
+                elif keysNsprites.right and keysNsprites.d:
+                    if not flag or allowAnyKey:
+                        allowAnyKey = False
+                        player.polarVel[0] += speedBoostOnPress
+                    flag = True
+                    player.polarVel[1] += angularVelocity * dt
+                elif keysNsprites.left and keysNsprites.a:
+                    if flag or allowAnyKey:
+                        allowAnyKey = False
+                        player.polarVel[0] += speedBoostOnPress
+                    flag = False
+                    player.polarVel[1] -= angularVelocity * dt
             
             if not any([keysNsprites.left, keysNsprites.right, keysNsprites.a, keysNsprites.d]):
                 if firstReset:
@@ -199,6 +196,12 @@ def runGame():
             if player.pos[0]<startfinish.startpos and player.pos[0]>startfinish.finishpos:
                 runtime +=dt
             elif player.pos[0]<startfinish.finishpos:
+                pastFinish = True
+                keysNsprites.a = False
+                keysNsprites.d = False
+                keysNsprites.left = False
+                keysNsprites.right = False
+
                 finishText.draw("Congrats lol ur time is: " + str(runtime), (xmax/2,ymax/2), screen)
                 pg.display.update()
                 if not textBoxCreated:
