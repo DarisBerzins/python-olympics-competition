@@ -3,6 +3,7 @@ import pygame as pg
 from random import randrange
 import os
 
+
 class boatState():
     
     def __init__(self):
@@ -27,6 +28,10 @@ class boatState():
         else:
             # print(10 + 3 * self.rearState + self.frontState, self.trailState)
             return 10 + 3 * self.rearState + self.frontState
+        
+class menuKeys():
+    up = False
+    down = False
 
 class animatedSurface():
     sprites = []
@@ -155,7 +160,7 @@ class textBox():
 
     def handleEvent(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
+            if self.rect.collidepoint(event.pos) and not self.returned:
                 self.writing = True
                 self.currentColor = self.activeColor
             else: 
@@ -164,7 +169,6 @@ class textBox():
 
         elif event.type == pg.KEYDOWN and self.writing:
             if event.key == pg.K_RETURN:
-                self.text = ''
                 self.writing = False
                 self.returned = True
             elif event.type == pg.K_BACKSPACE or event.key == 8:
@@ -174,7 +178,13 @@ class textBox():
         self.textSurface = self.font.render(self.text, True, self.textColor)
 
     def getText(self):
-        return self.text
+        if self.returned:
+            self.returned = False
+            t = self.text
+            self.text = ''
+            return t
+        else: return None
+
 
     def draw(self, screen):
         self.rect.width = max(self.initWidth, self.textSurface.get_width() + 10)
