@@ -18,6 +18,7 @@ bgRect = bg.get_rect()
 bgRect2 = bg.get_rect()
 
 font = pg.font.SysFont(None, 24)
+pixel_font = "assets/power_pixel-7.ttf"
 
 textBoxes = []
 
@@ -30,12 +31,6 @@ for file in os.listdir("assets/trash_sounds"):
     snd = pg.mixer.Sound(os.path.join("assets/trash_sounds",file))
     snd.set_volume(0.25)
     sounds.append(snd)
-
-dM_run = True
-
-menu = True
-menubg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[0])
-highscoresbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[1])
 
 def runGame():
 
@@ -57,8 +52,8 @@ def runGame():
 
     startfinish = startNfinish(-1000, 10000)
     runtime = 0
-    runtimeText = Text('Runtime', "assets/power_pixel-7.ttf", 32, (255,0,0))
-    finishText = Text("string", "assets/power_pixel-7.ttf", 32, (255,0,0))
+    runtimeText = Text('Runtime', pixel_font, 32, (255,0,0))
+    finishText = Text("string", pixel_font, 32, (255,0,0))
 
     speedBoostOnPress = 350
     angularVelocity = 1.8
@@ -236,36 +231,62 @@ def deathMenu(dM):
             
             if event.type == pg.KEYDOWN:
                 match event.key:
-                    case pg.K_UP: menuKeys.up = True
-                    case pg.K_DOWN: menuKeys.down = True
+                    case pg.K_UP: menu_keys.up = True
+                    case pg.K_DOWN: menu_keys.down = True
             
             if event.type == pg.KEYUP:
                 match event.key:
-                    case pg.K_UP: menuKeys.up = False
-                    case pg.K_DOWN: menuKeys.down = False
+                    case pg.K_UP: menu_keys.up = False
+                    case pg.K_DOWN: menu_keys.down = False
 
         pg.display.update()
 
+
+dM_run = True
+
+menu = True
+menubg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[0])
+highscoresbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[1])
+menu_keys = menuKeys()
+select = 0
+pressed = False
+
+buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,255,0)),
+           button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0)),
+           button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0))]
 
 while menu:
     for event in pg.event.get(pump=True):        
         if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
             menu = False
             
-        if event.type == pg.KEYDOWN:
+        if event.type == pg.KEYDOWN and not pressed:
             if event.key == pg.K_RETURN:
                 if runGame():
                     deathMenu(dM_run)
             match event.key:
-                case pg.K_UP: menuKeys.up = True
-                case pg.K_DOWN: menuKeys.down = True
+                case pg.K_UP: menu_keys.up = True; pressed = True
+                case pg.K_DOWN: menu_keys.down = True; pressed = True
+        else: pressed = False
+
+
+    if menu_keys.up: select-=1; menu_keys.up = False
+    elif menu_keys.down: select+=1; menu_keys.down = False
     
+    if select == len(buttons): select = 0
+    if select < 0: select = len(buttons)-1
+
     menuRect = pg.Rect(0,0,600,200)
     menuRect.center = (xmax/2,ymax/2)
     
+    
     screen.blit(menubg, (0,0))
     pg.draw.rect(screen, (200,200,200), menuRect)
-    
+    for but in buttons:
+        but.draw(screen)
+        but.buttoncolor = (0,255,0)
+    buttons[select].buttoncolor = (0,0,255)
+
     pg.display.flip()
     # runGame()
 
