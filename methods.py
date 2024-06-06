@@ -6,12 +6,31 @@ import os
 
 class boatState():
     
-    def __init__(self):
+    def __init__(self, xmax, ymax):
         self.left = False
         self.right = False
         self.a = False
         self.d = False
         self.trailState = False
+
+        self.sprites = []
+        self.rects = []
+        for file in os.listdir("assets/keys"):
+            self.sprites.append(pg.transform.scale_by(pg.image.load(os.path.join("assets/keys", file)), 3))
+
+        for sprite in self.sprites:
+            self.rects.append(sprite.get_rect())
+        
+        for i in range(len(self.rects)):
+            if i == 0 or i == 4:
+                self.rects[i].bottomleft = (50, ymax-50)
+            elif i == 1 or i == 5:
+                self.rects[i].bottomleft = (50 + self.rects[i].width + 5, ymax-50)
+            elif i == 2 or i == 6:
+                self.rects[i].bottomright = (xmax - 50 - self.rects[i].width - 5, ymax-50)
+            elif i == 3 or i == 7:
+                self.rects[i].bottomright = (xmax - 50, ymax - 50)
+
     
     def selectSprite(self): #0 is left, 1 is none, 2 is right
         if self.right == self.left: self.rearState = 1
@@ -28,6 +47,16 @@ class boatState():
         else:
             # print(10 + 3 * self.rearState + self.frontState, self.trailState)
             return 10 + 3 * self.rearState + self.frontState
+        
+    def drawKeypressIndicators(self, screen):
+        if not self.a: drawFromLists(screen, self.sprites, self.rects, 0)
+        else: drawFromLists(screen, self.sprites, self.rects, 4)
+        if not self.d: drawFromLists(screen, self.sprites, self.rects, 1)
+        else: drawFromLists(screen, self.sprites, self.rects, 5)
+        if not self.left: drawFromLists(screen, self.sprites, self.rects, 2)
+        else: drawFromLists(screen, self.sprites, self.rects, 6)
+        if not self.right: drawFromLists(screen, self.sprites, self.rects, 3)
+        else: drawFromLists(screen, self.sprites, self.rects, 7)
         
 class menuKeys():
     up = False
@@ -118,9 +147,6 @@ class startNfinish():
         # self.initialpos = initialpos
     def draw(self, screen):
         pg.draw.rect(screen, (255,0,0), pg.Rect(self.startpos,0,100,screen.get_size()[0])) #doesn't work
-    
-    
-
 
 class Text():
     def __init__(self, type: str, font, fontSize: int, color):
@@ -192,11 +218,12 @@ class textBox():
         pg.draw.rect(screen, self.currentColor, self.rect)
         screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
 
-
-
 #methods
 def InitPygame():
     pg.init()
     pg.display.set_caption("THE MOST FRENCH EXPERIENCE")
     icon = pg.image.load('assets/french_flag.png')
     pg.display.set_icon(icon)
+
+def drawFromLists(screen, sprite, rect, index):
+    screen.blit(sprite[index], rect[index])

@@ -46,7 +46,7 @@ def runGame():
     trashinterval = xmax
 
     player = Player()
-    keysNsprites = boatState()
+    keysNsprites = boatState(xmax, ymax)
     fps = Text('fps', None, 24, (255, 255, 255))
     speed = Text('speed', None, 24, (255, 255, 255))
     angleText = Text('angle', None, 24, (255, 255, 255))
@@ -171,6 +171,7 @@ def runGame():
             # print(player.pos)
 
             player.draw(screen)
+            keysNsprites.drawKeypressIndicators(screen)
             
             # startfinish.draw(screen)
 
