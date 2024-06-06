@@ -158,16 +158,25 @@ def runGame():
             for obj in trash:
                 obj.pos[0] = xmax-(obj.initialpos-player.pos[0]) #trash movement
                 obj.draw(screen)
+                dx = player.hitbox.left - obj.hitbox.left
+                dy = player.hitbox.top - obj.hitbox.top
                 # collide = pg.Rect.colliderect(player.hitbox, obj.hitbox)
-                collide = obj.mask.overlap(player.mask,(200 - obj.pos[0], player.pos[1] - obj.pos[1]))
-
+                # overlap_mask = obj.mask.overlap_mask(player.mask, (dx, dy))
+                collide = obj.mask.overlap(player.mask, (dx, dy))
+                # collide = pg.sprite.collide_mask(obj.sprite, player.rotatedSprites[player.frame][player.angle])
+                # print(collide)
                 if collide: 
-                    obj.color = (0,255,0)
+                    pg.draw.rect(screen,(255,0,0),pg.Rect(collide[0] + obj.hitbox.topleft[0], collide[1] + obj.hitbox.topleft[1],10,10))
+                    # obj.color = (0,255,0)
+                    # print("collision")
                     if not obj.sounded:
                         sounds[obj.random].play()
                         obj.sounded = True
                 else:
                     obj.sounded = False
+                # surf = overlap_mask.to_surface()
+                # screen.blit(surf, obj.hitbox)
+                
     
             dist = (xmax-(obj.initialpos-player.pos[0]))
             if (xmax - trash[-1].pos[0] > trashinterval):

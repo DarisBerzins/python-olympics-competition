@@ -100,23 +100,28 @@ class Player():
             tempList.append(pg.transform.rotate(sprites[i], angleRange))
         rotatedSprites.append(tempList)
     
-    hitboxSprite = pg.image.load("assets/kayak-no-paddles.png")
+    hitboxSprite = pg.transform.scale_by(pg.image.load("assets/kayak-no-paddles.png"), 2.2)
     hitbox = hitboxSprite.get_rect()
     for i in range(0, 361):
         rotatedHitboxes.append(pg.transform.rotate(hitboxSprite, i))
-    mask = pg.mask.from_surface(hitboxSprite)
+    mask = pg.mask.from_surface(rotatedHitboxes[angle])
     # hitbox.height -= 20
     def draw(self,screen):
         
         self.angle = -int(np.degrees(np.arctan2(self.vel[1], -self.vel[0])))
         self.hitbox = self.rotatedSprites[self.frame][self.angle].get_rect()
         self.hitbox.center = (200, self.pos[1])
+        ballsBox = self.rotatedHitboxes[self.angle].get_rect()
         self.mask = pg.mask.from_surface(self.rotatedHitboxes[self.angle])
+        self.drawing = self.mask.to_surface()
+        self.drawingrect = self.drawing.get_rect()
+        self.drawingrect.center = (200, self.pos[1])
+        
         # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
         if self.frame == 0: self.angle = 0
         screen.blit(self.rotatedSprites[self.frame][self.angle], self.hitbox)  
         # print(self.vel)      
-        # screen.blit(self.mask,(100, self.pos[1]))
+        # screen.blit(self.drawing, self.drawingrect)
 
 class Obstacle():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
@@ -134,9 +139,9 @@ class Obstacle():
     # def move(self,dt):
     #     self.x += self.v*dt
     def draw(self,screen):
-        self.hitbox.topleft = self.pos
+        self.hitbox.center = self.pos
         # pg.draw.rect(screen, self.color, self.hitbox)
-        screen.blit(self.sprite,self.pos)
+        screen.blit(self.sprite,self.hitbox)
     
         # screen.blit(self.mask, self.pos)
 
