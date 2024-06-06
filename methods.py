@@ -33,13 +33,13 @@ class boatState():
 
     
     def selectSprite(self): #0 is left, 1 is none, 2 is right
-        if self.right == self.left: self.rearState = 1
-        elif self.left: self.rearState = 2
-        elif self.right: self.rearState = 0
+        if self.right == self.left: self.frontState = 1
+        elif self.left: self.frontState = 2
+        elif self.right: self.frontState = 0
 
-        if self.a == self.d: self.frontState = 1
-        elif self.a: self.frontState = 2
-        elif self.d: self.frontState = 0
+        if self.a == self.d: self.rearState = 1
+        elif self.a: self.rearState = 2
+        elif self.d: self.rearState = 0
 
         if self.trailState:
             # print(3 * self.rearState + self.frontState + 1, self.trailState)
