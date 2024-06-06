@@ -137,6 +137,53 @@ class Text():
         self.rect = self.image.get_rect(center = position)
         screen.blit(self.image, self.rect)
 
+class textBox():
+
+    def __init__(self, width: int, height: int, x: int, y: int, font, fontSize: int):
+        self.initWidth = width
+        self.initHeight = height
+        self.font = pg.font.Font(font, fontSize)
+        self.textColor = (255, 255, 255)
+        self.activeColor = (128, 0, 0)
+        self.inactiveColor = (80, 80, 80)
+        self.currentColor = self.inactiveColor
+        self.rect = pg.Rect(x, y, width, height)
+        self.text = ''
+        self.returned = False
+        self.textSurface = self.font.render(self.text, True, self.textColor)
+        self.writing = False
+
+    def handleEvent(self, event):
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                self.writing = True
+                self.currentColor = self.activeColor
+            else: 
+                self.writing = False
+                self.currentColor = self.inactiveColor
+
+        elif event.type == pg.KEYDOWN and self.writing:
+            if event.key == pg.K_RETURN:
+                self.text = ''
+                self.writing = False
+                self.returned = True
+            elif event.type == pg.K_BACKSPACE or event.key == 8:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
+        self.textSurface = self.font.render(self.text, True, self.textColor)
+
+    def getText(self):
+        return self.text
+
+    def draw(self, screen):
+        self.rect.width = max(self.initWidth, self.textSurface.get_width() + 10)
+
+        pg.draw.rect(screen, self.currentColor, self.rect)
+        screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
+
+
+
 #methods
 def InitPygame():
     pg.init()

@@ -51,6 +51,7 @@ startfinish = startNfinish(-1000, 10000)
 runtime = 0
 runtimeText = Text('Runtime', "assets/power_pixel-7.ttf", 32, (255,0,0))
 finishText = Text("string", "assets/power_pixel-7.ttf", 32, (255,0,0))
+testBox = textBox(200, 30, xmax//2, ymax//2, None, 24)
 
 minvel = 5
 speedBoostOnPress = 350
@@ -72,7 +73,7 @@ while running:
         for event in pg.event.get(pump=True):
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 running = False
-            
+            testBox.handleEvent(event)
             if event.type == pg.KEYDOWN:
                 match event.key:
                     case pg.K_RIGHT: keysNsprites.right = True
@@ -87,12 +88,15 @@ while running:
                     case pg.K_d: keysNsprites.d = False
                     case pg.K_a: keysNsprites.a = False
 
+        if testBox.returned:
+            print(testBox.getText())
+
         player.polarVel[0] = np.linalg.norm(player.vel)
         player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
 
         if (keysNsprites.right and keysNsprites.left) or (keysNsprites.left and keysNsprites.d) or (keysNsprites.right and keysNsprites.a) or (keysNsprites.a and keysNsprites.d):
             # player.frame = 0
-            player.polarVel[0] -= min(speedBoostOnPress//6, player.polarVel[0]//8)
+            player.polarVel[0] -= min(speedBoostOnPress//4, player.polarVel[0]//6)
         elif keysNsprites.right and keysNsprites.d:
             if not flag or allowAnyKey:
                 allowAnyKey = False
@@ -171,6 +175,8 @@ while running:
         fps.draw(clock.get_fps(), (50, 20), screen)
         speed.draw(np.linalg.norm(player.vel), (xmax-50, 20), screen)
         angleText.draw(player.angle, (20, ymax-20), screen)
+
+        testBox.draw(screen)
 
         runtimeText.draw(runtime, (xmax/2,40), screen)
 
