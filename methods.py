@@ -223,6 +223,10 @@ class textBox():
         pg.draw.rect(screen, self.currentColor, self.rect)
         screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
 
+class button():
+    def __init__(self,rect):
+        self.rect = rect
+
 #methods
 def InitPygame():
     pg.init()

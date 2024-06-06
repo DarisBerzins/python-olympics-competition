@@ -157,22 +157,13 @@ def runGame():
                 obj.draw(screen)
                 dx = player.hitbox.left - obj.hitbox.left
                 dy = player.hitbox.top - obj.hitbox.top
-                # collide = pg.Rect.colliderect(player.hitbox, obj.hitbox)
-                # overlap_mask = obj.mask.overlap_mask(player.mask, (dx, dy))
                 collide = obj.mask.overlap(player.mask, (dx, dy))
-                # collide = pg.sprite.collide_mask(obj.sprite, player.rotatedSprites[player.frame][player.angle])
-                # print(collide)
                 if collide: 
-                    pg.draw.rect(screen,(255,0,0),pg.Rect(collide[0] + obj.hitbox.topleft[0], collide[1] + obj.hitbox.topleft[1],10,10))
-                    # obj.color = (0,255,0)
-                    # print("collision")
                     if not obj.sounded:
                         sounds[obj.random].play()
                         obj.sounded = True
                 else:
                     obj.sounded = False
-                # surf = overlap_mask.to_surface()
-                # screen.blit(surf, obj.hitbox)
                 
     
             dist = (xmax-(obj.initialpos-player.pos[0]))
@@ -240,20 +231,19 @@ def deathMenu(dM):
     
     while dM:
         for event in pg.event.get(pump=True):
-                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                    dM = False
-                
-                if event.type == pg.KEYDOWN:
-                    match event.key:
-                        case pg.K_UP: menuKeys.up = True
-                        case pg.K_DOWN: menuKeys.down = True
-                
-                if event.type == pg.KEYUP:
-                    match event.key:
-                        case pg.K_UP: menuKeys.up = False
-                        case pg.K_DOWN: menuKeys.down = False
-               
-        # pg.draw.rect(screen, (40,40,40), pg.Rect(200,200,200,200))
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                dM = False
+            
+            if event.type == pg.KEYDOWN:
+                match event.key:
+                    case pg.K_UP: menuKeys.up = True
+                    case pg.K_DOWN: menuKeys.down = True
+            
+            if event.type == pg.KEYUP:
+                match event.key:
+                    case pg.K_UP: menuKeys.up = False
+                    case pg.K_DOWN: menuKeys.down = False
+
         pg.display.update()
 
 
@@ -266,8 +256,16 @@ while menu:
             if event.key == pg.K_RETURN:
                 if runGame():
                     deathMenu(dM_run)
+            match event.key:
+                case pg.K_UP: menuKeys.up = True
+                case pg.K_DOWN: menuKeys.down = True
+    
+    menuRect = pg.Rect(0,0,600,200)
+    menuRect.center = (xmax/2,ymax/2)
     
     screen.blit(menubg, (0,0))
+    pg.draw.rect(screen, (200,200,200), menuRect)
+    
     pg.display.flip()
     # runGame()
 
