@@ -33,6 +33,10 @@ for file in os.listdir("assets/trash_sounds"):
 
 dM_run = True
 
+menu = True
+menubg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[0])
+highscoresbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[1])
+
 def runGame():
 
     t0 = 0.001 * pg.time.get_ticks()
@@ -44,7 +48,7 @@ def runGame():
     
     trash = [Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
     trashinterval = xmax
-
+    
     player = Player()
     keysNsprites = boatState(xmax, ymax)
     fps = Text('fps', None, 24, (255, 255, 255))
@@ -198,6 +202,7 @@ def runGame():
                     textBoxes.remove(textBoxes[-1])
                     textBoxCreated = False
                     running = False
+    return True #when the game is over occurs
 
 def deathMenu(dM):
     scores = []
@@ -239,8 +244,19 @@ def deathMenu(dM):
         # pg.draw.rect(screen, (40,40,40), pg.Rect(200,200,200,200))
         pg.display.update()
 
-runGame()
 
-deathMenu(dM_run)
+while menu:
+    for event in pg.event.get(pump=True):        
+        if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+            menu = False
+            
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_RETURN:
+                if runGame():
+                    deathMenu(dM_run)
+    
+    screen.blit(menubg, (0,0))
+    pg.display.flip()
+    # runGame()
 
 pg.quit()
