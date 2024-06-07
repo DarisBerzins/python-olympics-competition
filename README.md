@@ -8,7 +8,7 @@
 * ~Rotate boat when turning~
 * ~Fix movement~
 * Border for water
-* Background music?
+* ~Background music?~
 * ~Finish boat asset - splashes~
 * Finish line
 * Start line or countdown to starts
