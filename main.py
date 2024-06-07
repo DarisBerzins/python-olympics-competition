@@ -95,6 +95,7 @@ def runGame():
     if enableMusic: gameSound.play(-1)
 
     select = 0
+    pressed = 0
     
     while running:
         pg.display.flip()
@@ -129,13 +130,6 @@ def runGame():
                             case pg.K_a: keysNsprites.a = False
                             case pg.K_RETURN: menu_keys.enter = False
                              
-                if event.type == pg.KEYDOWN and not pressed:
-                    if event.key == pg.K_RETURN:
-                        deadbuttons[select].execute()
-                    match event.key:
-                        case pg.K_UP: menu_keys.up = True; pressed = True
-                        case pg.K_DOWN: menu_keys.down = True; pressed = True
-                else: pressed = False
 
 
             player.polarVel[0] = np.linalg.norm(player.vel)
@@ -274,6 +268,15 @@ def runGame():
                     running = False
                     
             elif player.dead:
+                for event in pg.event.get():
+                    if event.type == pg.KEYDOWN and not pressed:
+                        if event.key == pg.K_RETURN:
+                            deadbuttons[select].execute()
+                        match event.key:
+                            case pg.K_UP: menu_keys.up = True; pressed = True
+                            case pg.K_DOWN: menu_keys.down = True; pressed = True
+                    else: pressed = False
+                
                 dead_surf = pg.Surface((650,325))
                 dead_surf.set_alpha(128)
                 dead_rect = dead_surf.get_rect()
@@ -291,15 +294,15 @@ def runGame():
                 for but in deadbuttons:
                     but.draw(screen)
                     but.buttoncolor = colors.unSelectedButtonColor
-                    buttons[select].buttoncolor = colors.selectedButtonColor
-                    pg.display.update()
-                    if menu_keys.enter:
-                        running = False
+                buttons[select].buttoncolor = colors.selectedButtonColor
+                pg.display.update()
+                # if menu_keys.enter:
+                #     running = False
+                
             elif player.pos[0]<startfinish.startpos and player.pos[0]>startfinish.finishpos:
                 runtime +=dt
                 
     if enableMusic: gameSound.stop()
-    return True #when the game is over occurs
 
 def scoreboard(dM):
     scores = []
@@ -345,6 +348,10 @@ def scoreboard(dM):
 def escape():
     menu_keys.escape = True
 
+def restart():
+    menu_keys.escape = True
+    runGame()
+
 dM_run = True
 
 menu = True
@@ -359,7 +366,7 @@ buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,2
            button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0),lambda: scoreboard(dM_run)),
            button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0),escape)]
 
-deadbuttons = [button(400,50,(xmax/2,ymax/2),"RESTART",pixel_font,32,(255,0,0),(0,255,0),runGame),
+deadbuttons = [button(400,50,(xmax/2,ymax/2),"RESTART",pixel_font,32,(255,0,0),(0,255,0),restart),
            button(400,50,(xmax/2,ymax/2+80),"MAIN MENU",pixel_font,32,(255,0,0),(0,255,0),escape)]
 
 while menu:
