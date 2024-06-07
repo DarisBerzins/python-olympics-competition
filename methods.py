@@ -169,12 +169,22 @@ class Powerup():
         screen.blit(self.sprite,self.hitbox)
 
 class startNfinish():
-    def __init__(self, startpos, lengthofTrack):
+    def __init__(self, startpos, lengthofTrack, startSurface, finishSurface, xmax, ymax):
         self.startpos = startpos
         self.finishpos = self.startpos - lengthofTrack
-        # self.initialpos = initialpos
-    def draw(self, screen):
-        pg.draw.rect(screen, (255,0,0), pg.Rect(self.startpos,0,100,screen.get_size()[0])) #doesn't work
+        self.startSurface = startSurface
+        self.finishSurface = finishSurface
+        self.startRect = self.startSurface.get_rect()
+        self.finishRect = self.finishSurface.get_rect()
+        self.startRect.centery = ymax//2
+        self.startRect.centerx = startpos
+        self.finishRect.centery = ymax//2
+        self.finishRect.centerx = self.finishpos
+    def draw(self, screen, position, xmax):
+        self.startRect.centerx = xmax//2 - (self.startpos - position)
+        self.finishRect.centerx = xmax//2 - (self.finishpos - position)
+        screen.blit(self.startSurface, self.startRect)
+        screen.blit(self.finishSurface, self.finishRect)
 
 class Text():
     def __init__(self, type: str, font, fontSize: int, color):

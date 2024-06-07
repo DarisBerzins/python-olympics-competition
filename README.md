@@ -10,9 +10,10 @@
 * Border for water
 * ~Background music?~
 * ~Finish boat asset - splashes~
-* Finish line
-* Start line or countdown to starts
-* Powerups?
+* ~Finish line~
+* ~Start line or countdown to starts~
+* ~Powerups?~
 * make destroyed boat sprite have white flags
+* end experience tm
 
 ## Comment all code when finished

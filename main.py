@@ -71,7 +71,7 @@ def runGame():
     speed = Text('speed', None, 24, colors.white)
     angleText = Text('angle', None, 24, colors.white)
 
-    startfinish = startNfinish(-1000, 10000)
+    startfinish = startNfinish(-1000, 10000, pg.image.load('assets/start_line.png'), pg.image.load('assets/finish_line.png'), xmax, ymax)
     runtime = 0
     runtimeText = Text('Runtime', pixel_font, 32, colors.red)
     finishText = Text("string", pixel_font, 32, colors.red)
@@ -217,6 +217,7 @@ def runGame():
             # print(player.pos)
 
             player.draw(screen)
+            startfinish.draw(screen, player.pos[0], xmax)
             keysNsprites.drawKeypressIndicators(screen)
             
             # startfinish.draw(screen)
