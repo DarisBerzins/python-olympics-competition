@@ -21,6 +21,7 @@ class boatState():
         self.a = False
         self.d = False
         self.trailState = False
+        self.stopInputs = False
 
         self.sprites = []
         self.rects = []
@@ -58,19 +59,25 @@ class boatState():
             return 10 + 3 * self.rearState + self.frontState
         
     def drawKeypressIndicators(self, screen):
-        if not self.a: drawFromLists(screen, self.sprites, self.rects, 0)
-        else: drawFromLists(screen, self.sprites, self.rects, 4)
-        if not self.d: drawFromLists(screen, self.sprites, self.rects, 1)
-        else: drawFromLists(screen, self.sprites, self.rects, 5)
-        if not self.left: drawFromLists(screen, self.sprites, self.rects, 2)
-        else: drawFromLists(screen, self.sprites, self.rects, 6)
-        if not self.right: drawFromLists(screen, self.sprites, self.rects, 3)
-        else: drawFromLists(screen, self.sprites, self.rects, 7)
+        if self.stopInputs:
+            drawFromLists(screen, self.sprites, self.rects, 0)
+            drawFromLists(screen, self.sprites, self.rects, 1)
+            drawFromLists(screen, self.sprites, self.rects, 2)
+            drawFromLists(screen, self.sprites, self.rects, 3)
+        else:
+            if not self.a: drawFromLists(screen, self.sprites, self.rects, 0)
+            else: drawFromLists(screen, self.sprites, self.rects, 4)
+            if not self.d: drawFromLists(screen, self.sprites, self.rects, 1)
+            else: drawFromLists(screen, self.sprites, self.rects, 5)
+            if not self.left: drawFromLists(screen, self.sprites, self.rects, 2)
+            else: drawFromLists(screen, self.sprites, self.rects, 6)
+            if not self.right: drawFromLists(screen, self.sprites, self.rects, 3)
+            else: drawFromLists(screen, self.sprites, self.rects, 7)
         
 class menuKeys():
     up = False
     down = False
-    escape = False
+    enter = False
 
 class animatedSurface():
     sprites = []
@@ -236,7 +243,7 @@ class textBox():
             if event.key == pg.K_RETURN:
                 self.writing = False
                 self.returned = True
-            elif event.type == pg.K_BACKSPACE or event.key == 8:
+            elif event.key == pg.K_BACKSPACE:
                 self.text = self.text[:-1]
             else:
                 self.text += event.unicode
@@ -288,10 +295,6 @@ class Borders():
         self.rect.left = playerPos % xmax - xmax
         self.rect2.left = playerPos % xmax
 
-class Cigarettes():
-    def __init__(self, x, y):
-        pass
-
 #methods
 def InitPygame():
     pg.init()
@@ -301,8 +304,3 @@ def InitPygame():
 
 def drawFromLists(screen, sprite, rect, index):
     screen.blit(sprite[index], rect[index])
-    
-#functions
-def escape():
-    print("escape")
-    return pg.event.get().append(pg.K_ESCAPE)
