@@ -174,6 +174,8 @@ def runGame():
             player.vel[1] = np.sin(player.polarVel[1])*player.polarVel[0]
 
             player.accel -= player.vel
+            if player.dead:
+                player.accel -= player.vel * 6
 
             player.vel = player.vel + player.accel * dt
             player.pos = player.pos + player.vel * dt
@@ -197,7 +199,6 @@ def runGame():
                 collide = obj.mask.overlap(player.mask, (dx, dy))
                 if collide: 
                     player.dead = True
-                    player.vel = player.vel * 0
                     if not obj.sounded:
                         trashSounds[obj.random].play()
                         obj.sounded = True
