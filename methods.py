@@ -236,6 +236,16 @@ class button():
         self.str.draw(self.text,self.rect.center,screen)
 
 
+class colors():
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+    red = (255, 0, 0)
+    green = (0, 255, 255)
+    blue = (0, 0, 255)
+    boatRed = (164, 52, 58)
+    unSelectedButtonColor = (191, 191, 191)
+    selectedButtonColor = (210, 157, 0)
+
 #methods
 def InitPygame():
     pg.init()

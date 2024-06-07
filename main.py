@@ -127,7 +127,7 @@ def runGame():
             if player.polarVel[0] >= trailSpeed:
                 keysNsprites.trailState = True
             else: keysNsprites.trailState = False
-            # print(keysNsprites.left, keysNsprites.right, keysNsprites.a, keysNsprites.d, keysNsprites.trailState)
+
             player.frame = keysNsprites.selectSprite()
 
             player.vel[0] = -np.cos(player.polarVel[1])*player.polarVel[0]
@@ -281,18 +281,13 @@ while menu:
     elif menu_keys.down: select+=1; menu_keys.down = False
     
     if select == len(buttons): select = 0
-    if select < 0: select = len(buttons)-1
-
-    menuRect = pg.Rect(0,0,600,200)
-    menuRect.center = (xmax/2,ymax/2)
-    
+    if select < 0: select = len(buttons)-1    
     
     screen.blit(menubg, (0,0))
-    pg.draw.rect(screen, (200,200,200), menuRect)
     for but in buttons:
         but.draw(screen)
-        but.buttoncolor = (0,255,0)
-    buttons[select].buttoncolor = (0,0,255)
+        but.buttoncolor = colors.unSelectedButtonColor
+    buttons[select].buttoncolor = colors.selectedButtonColor
 
     pg.display.flip()
     # runGame()
