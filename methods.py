@@ -219,11 +219,13 @@ class textBox():
         self.activeColor = colors.selectedButtonColor
         self.inactiveColor = colors.unSelectedButtonColor
         self.currentColor = self.inactiveColor
+        self.pos = (x,y)
         self.rect = pg.Rect(x, y, width, height)
-        self.rect.center = (x,y)
+        self.rect.center = self.pos
         self.text = 'Type your name here!'
         self.returned = False
         self.textSurface = self.font.render(self.text, True, self.textColor)
+        self.textrect = self.textSurface.get_rect()
         self.writing = False
         self.firstinit = False
 
@@ -232,14 +234,12 @@ class textBox():
             if self.rect.collidepoint(event.pos) and not self.returned:
                 self.writing = True
                 self.currentColor = self.activeColor
+                self.text = ''
             else: 
                 self.writing = False
                 self.currentColor = self.inactiveColor
 
         elif event.type == pg.KEYDOWN and self.writing:
-            if self.firstinit:
-                self.text = ''
-                self.firstinit = False
             if event.key == pg.K_RETURN:
                 self.writing = False
                 self.returned = True
@@ -248,7 +248,10 @@ class textBox():
             else:
                 self.text += event.unicode
         self.textSurface = self.font.render(self.text, True, self.textColor)
-
+        self.textrect = self.textSurface.get_rect()
+        self.rect.center = self.pos
+        self.textrect.center = self.rect.center
+        
     def getText(self):
         if self.returned:
             self.returned = False
@@ -261,7 +264,7 @@ class textBox():
     def draw(self, screen):
         self.rect.width = max(self.initWidth, self.textSurface.get_width() + 10)
         pg.draw.rect(screen, self.currentColor, self.rect)
-        screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
+        screen.blit(self.textSurface, self.textrect)
 
 class button():
     def __init__(self,width,height,pos,text,font,font_size:int,font_color, buttoncolor, function):

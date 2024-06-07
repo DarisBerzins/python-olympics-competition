@@ -76,8 +76,8 @@ def runGame():
 
     startfinish = startNfinish(-1000, 10000, pg.image.load('assets/start_line.png'), pg.image.load('assets/finish_line.png'), xmax, ymax)
     runtime = 0
-    runtimeText = Text('Runtime', pixel_font, 32, colors.red)
-    finishText = Text("string", pixel_font, 32, colors.red)
+    runtimeText = Text('Runtime', pixel_font, 32, colors.selectedButtonColor)
+    finishText = Text("string", pixel_font, 32, colors.selectedButtonColor)
 
     border = Borders('assets/borders.png')
 
@@ -233,8 +233,6 @@ def runGame():
             speed.draw(np.linalg.norm(player.vel), (xmax-50, 20), screen)
             angleText.draw(player.angle, (20, ymax-20), screen)
 
-            for i in textBoxes: i.draw(screen)
-
             runtimeText.draw(runtime, (xmax/2,40), screen)
 
             if player.pos[0]<startfinish.startpos and player.pos[0]>startfinish.finishpos:
@@ -245,9 +243,17 @@ def runGame():
                 keysNsprites.d = False
                 keysNsprites.left = False
                 keysNsprites.right = False
-
-                finishText.draw("Finish!!", (xmax/2-50,ymax/2-50), screen)
+                
+                end_rect = pg.Rect(0,0,600,200)
+                end_rect.center = (xmax/2,ymax/2)
+                pg.draw.rect(screen, colors.white, end_rect)
+                finishText.draw("Finish!!", (xmax/2,ymax/2-50), screen)
+                finishText.draw("Press enter to submit",(xmax/2,ymax/2+50), screen)
+                finishText.draw("and quit to main menu",(xmax/2,ymax/2+80), screen)
+                for i in textBoxes: i.draw(screen)
                 pg.display.update()
+                
+                
                 if not textBoxCreated:
                     textBoxes.append(textBox(300, 60, xmax//2, ymax//2, "assets/power_pixel-7.ttf", 36))
                     textBoxCreated = True
