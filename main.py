@@ -70,19 +70,23 @@ enteredScorebd = True
 
 pulseEnter = True
 
+exitingScoreboard = False
 
 dM_run = True
 
 menubg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[0])
 highscoresbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[1])
 introbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[2])
+
 menu_keys = menuKeys()
 select = 0
 pressed = False
 firstTimeInMenu = True
 
 def setMenu():
-    global menu, game, scorebd, enteredMenu, select
+    global menu, game, scorebd, enteredMenu, select, exitingScoreboard
+    if scorebd:
+        exitingScoreboard = True
     select = 0
     enteredMenu = True
     menu = True
@@ -97,6 +101,7 @@ def setGame():
     enteredGame = True
     menu = False
     scorebd = False
+    gameSound.stop()
 
 def setScorebd():
     global menu, game, scorebd, enteredScorebd, select
@@ -367,7 +372,10 @@ def scoreboardFrame():
 
 
 def initMenu():
-    if enableMusic: menuSound.play(-1)
+    global enableMusic, exitingScoreboard
+    if enableMusic and not exitingScoreboard: 
+        menuSound.play(-1)
+        exitingScoreboard = False
 
 def menuFrame():
     global select, pulseEnter
