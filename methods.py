@@ -61,6 +61,7 @@ class boatState():
 class menuKeys():
     up = False
     down = False
+    escape = False
 
 class animatedSurface():
     sprites = []
@@ -259,3 +260,8 @@ def InitPygame():
 
 def drawFromLists(screen, sprite, rect, index):
     screen.blit(sprite[index], rect[index])
+    
+#functions
+def escape():
+    print("escape")
+    return pg.event.get().append(pg.K_ESCAPE)

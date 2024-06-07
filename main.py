@@ -74,8 +74,9 @@ def runGame():
             t0 = t
 
             for event in pg.event.get(pump=True):
-                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                if event.type == pg.QUIT or menu_keys.escape:
                     running = False
+                    menu_keys.escape = False
                 
                 for i in textBoxes: i.handleEvent(event)
 
@@ -86,6 +87,7 @@ def runGame():
                             case pg.K_LEFT: keysNsprites.left = True
                             case pg.K_d: keysNsprites.d = True
                             case pg.K_a: keysNsprites.a = True
+                            case pg.K_ESCAPE: menu_keys.escape = True; 
                     
                     if event.type == pg.KEYUP:
                         match event.key:
@@ -226,13 +228,15 @@ def deathMenu(dM):
     
     while dM:
         for event in pg.event.get(pump=True):
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+            if event.type == pg.QUIT or menu_keys.escape:
                 dM = False
+                menu_keys.escape = False
             
             if event.type == pg.KEYDOWN:
                 match event.key:
                     case pg.K_UP: menu_keys.up = True
                     case pg.K_DOWN: menu_keys.down = True
+                    case pg.K_ESCAPE: menu_keys.escape = True; 
             
             if event.type == pg.KEYUP:
                 match event.key:
@@ -241,6 +245,8 @@ def deathMenu(dM):
 
         pg.display.update()
 
+def escape():
+    menu_keys.escape = True
 
 dM_run = True
 
@@ -253,19 +259,19 @@ pressed = False
 
 buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,255,0),runGame),
            button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0),lambda: deathMenu(dM_run)),
-           button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0),pg.K_ESCAPE)]
+           button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0),escape)]
 
 while menu:
-    for event in pg.event.get(pump=True):        
-        if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-            menu = False
-            
+    for event in pg.event.get(pump=True):  
+        if event.type == pg.QUIT or menu_keys.escape:
+            menu = False                 
         if event.type == pg.KEYDOWN and not pressed:
             if event.key == pg.K_RETURN:
                 buttons[select].execute()
             match event.key:
                 case pg.K_UP: menu_keys.up = True; pressed = True
                 case pg.K_DOWN: menu_keys.down = True; pressed = True
+                case pg.K_ESCAPE: menu_keys.escape = True; 
         else: pressed = False
 
 
