@@ -61,8 +61,9 @@ maxdt = 0.5
 running = True
 
 game = False
-menu = True
+menu = False
 scorebd = False
+intro = True
 
 enteredGame = True
 enteredMenu = True
@@ -439,6 +440,11 @@ while running:
                     case pg.K_DOWN: menu_keys.down = False
         #============================================================= INPUTS
         # print(menu,game,scorebd)
+        if intro:
+            screen.blit(introbg, screen.get_rect())
+            if menu_keys.enter:
+                intro = False
+
         if menu:
             if enteredMenu:
                 enteredMenu = False
