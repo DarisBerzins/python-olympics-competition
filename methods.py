@@ -3,6 +3,15 @@ import pygame as pg
 from random import randrange
 import os
 
+class colors():
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+    red = (255, 0, 0)
+    green = (0, 255, 255)
+    blue = (0, 0, 255)
+    boatRed = (164, 52, 58)
+    unSelectedButtonColor = (191, 191, 191)
+    selectedButtonColor = (210, 157, 0)
 
 class boatState():
     
@@ -126,7 +135,6 @@ class Player():
 
 class Obstacle():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
-    color = (255, 0, 0)
     def __init__(self,sprites,sounds,pos,initialpos):
         self.random = randrange(0,len(sprites))
         self.sprite = sprites[self.random]
@@ -180,9 +188,9 @@ class textBox():
         self.initWidth = width
         self.initHeight = height
         self.font = pg.font.Font(font, fontSize)
-        self.textColor = (255, 255, 255)
-        self.activeColor = (128, 0, 0)
-        self.inactiveColor = (80, 80, 80)
+        self.textColor = colors.white
+        self.activeColor = colors.selectedButtonColor
+        self.inactiveColor = colors.unSelectedButtonColor
         self.currentColor = self.inactiveColor
         self.rect = pg.Rect(x, y, width, height)
         self.text = ''
@@ -220,7 +228,6 @@ class textBox():
 
     def draw(self, screen):
         self.rect.width = max(self.initWidth, self.textSurface.get_width() + 10)
-
         pg.draw.rect(screen, self.currentColor, self.rect)
         screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
 
@@ -239,17 +246,6 @@ class button():
         
     def execute(self):
         self.function()
-
-
-class colors():
-    white = (255, 255, 255)
-    black = (0, 0, 0)
-    red = (255, 0, 0)
-    green = (0, 255, 255)
-    blue = (0, 0, 255)
-    boatRed = (164, 52, 58)
-    unSelectedButtonColor = (191, 191, 191)
-    selectedButtonColor = (210, 157, 0)
 
 #methods
 def InitPygame():
