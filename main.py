@@ -1,7 +1,6 @@
 import pygame as pg
 from methods import *
 import os
-import csv
 from random import randrange, randint
 
 InitPygame()
@@ -257,13 +256,10 @@ def gameFrame():
     if (xmax - boosters[-1].pos[0] > boostInterval):
         boosters.append(Powerup(boostSprites,np.array([3.5*xmax,randrange(150, ymax-100, 50)]), player.pos[0] - 100))
         boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
-    # print(player.pos)
 
     player.draw(screen)
     startfinish.draw(screen, player.pos[0], xmax)
     keysNsprites.drawKeypressIndicators(screen)
-    
-    # startfinish.draw(screen)
 
     fps.draw(clock.get_fps(), (50, 20), screen)
     speed.draw(np.linalg.norm(player.vel), (xmax-50, 20), screen)
@@ -321,8 +317,6 @@ def gameFrame():
             but.draw(screen)
             but.buttoncolor = colors.unSelectedButtonColor
         deadbuttons[select].buttoncolor = colors.selectedButtonColor
-        # if menu_keys.enter:
-        #     running = False
         
     elif player.pos[0]<startfinish.startpos and player.pos[0]>startfinish.finishpos:
         runtime +=dt
@@ -339,7 +333,6 @@ def initScoreboard():
             score = line.strip("\n").split(",")
             score[-1] = float(score[-1])
             scores.append(score)
-    # print(scores)
     
     scoreboard_rect = pg.Rect(0,0,500,400)
     scoreboard_rect.center = (xmax/2,ymax/2)
@@ -384,7 +377,6 @@ def menuFrame():
     global select, pulseEnter
     if menu_keys.enter and pulseEnter:
         pulseEnter = False
-        # print(select)
         if select == 0: 
             if enableMusic: menuSound.stop()
         buttons[select].execute()
@@ -441,7 +433,6 @@ while running:
                     case pg.K_UP: menu_keys.up = False
                     case pg.K_DOWN: menu_keys.down = False
         #============================================================= INPUTS
-        # print(menu,game,scorebd)
         if intro:
             screen.blit(introbg, screen.get_rect())
 
@@ -457,7 +448,6 @@ while running:
                 initGame()
             gameFrame()
             if not game:
-                print("balls")
                 exitGame()
         
         if scorebd:

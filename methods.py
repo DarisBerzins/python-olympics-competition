@@ -52,10 +52,8 @@ class boatState():
         elif self.d: self.rearState = 0
 
         if self.trailState:
-            # print(3 * self.rearState + self.frontState + 1, self.trailState)
             return 3 * self.rearState + self.frontState + 1
         else:
-            # print(10 + 3 * self.rearState + self.frontState, self.trailState)
             return 10 + 3 * self.rearState + self.frontState
         
     def drawKeypressIndicators(self, screen):
@@ -124,7 +122,6 @@ class Player():
     for i in range(0, 361):
         rotatedHitboxes.append(pg.transform.rotate(hitboxSprite, i))
     mask = pg.mask.from_surface(rotatedHitboxes[angle])
-    # hitbox.height -= 20
     def draw(self,screen):
         
         self.angle = -int(np.degrees(np.arctan2(self.vel[1], -self.vel[0])))
@@ -135,16 +132,11 @@ class Player():
         self.drawing = self.mask.to_surface()
         self.drawingrect = self.drawing.get_rect()
         self.drawingrect.center = (200, self.pos[1])
-        
-        # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
         if self.dead: self.frame = 0
         if self.frame == 0: self.angle = 0
         screen.blit(self.rotatedSprites[self.frame][self.angle], self.hitbox)  
-        # print(self.vel)      
-        # screen.blit(self.drawing, self.drawingrect)
 
 class Obstacle():
-    # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
     def __init__(self,sprites,pos,initialpos):
         self.random = randrange(0,len(sprites))
         self.sprite = sprites[self.random]
@@ -161,7 +153,6 @@ class Obstacle():
             screen.blit(self.sprite,self.hitbox)
 
 class Powerup():
-    # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
     def __init__(self,sprites,pos,initialpos):
         self.random = randrange(0,len(sprites))
         self.sprite = sprites[self.random]
