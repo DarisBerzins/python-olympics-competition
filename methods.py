@@ -102,6 +102,7 @@ class Player():
     rotatedHitboxes = []
     angle = 20
     frame = 0
+    dead = False
     for file in os.listdir(folderdir):
         sprites.append(pg.transform.scale_by(pg.image.load(os.path.join(folderdir, file)), 2.2))
     for i in range(len(sprites)):
@@ -128,6 +129,7 @@ class Player():
         self.drawingrect.center = (200, self.pos[1])
         
         # pg.draw.rect(screen, (255, 0, 0), self.hitbox)
+        if self.dead: self.frame = 0
         if self.frame == 0: self.angle = 0
         screen.blit(self.rotatedSprites[self.frame][self.angle], self.hitbox)  
         # print(self.vel)      

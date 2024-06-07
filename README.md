@@ -13,5 +13,6 @@
 * Finish line
 * Start line or countdown to starts
 * Powerups?
+* make destroyed boat sprite have white flags
 
 ## Comment all code when finished

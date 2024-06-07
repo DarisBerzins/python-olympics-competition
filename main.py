@@ -96,7 +96,8 @@ def runGame():
                             case pg.K_LEFT: keysNsprites.left = True
                             case pg.K_d: keysNsprites.d = True
                             case pg.K_a: keysNsprites.a = True
-                            case pg.K_ESCAPE: menu_keys.escape = True; 
+                            case pg.K_ESCAPE: menu_keys.escape = True
+                            case pg.K_RETURN: menu_keys.enter = True
                     
                     if event.type == pg.KEYUP:
                         match event.key:
@@ -104,11 +105,12 @@ def runGame():
                             case pg.K_LEFT: keysNsprites.left = False
                             case pg.K_d: keysNsprites.d = False
                             case pg.K_a: keysNsprites.a = False
+                            case pg.K_RETURN: menu_keys.enter = False
 
             player.polarVel[0] = np.linalg.norm(player.vel)
             player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
 
-            if not pastFinish:
+            if not (pastFinish or player.dead):
                 if (keysNsprites.right and keysNsprites.left) or (keysNsprites.left and keysNsprites.d) or (keysNsprites.right and keysNsprites.a) or (keysNsprites.a and keysNsprites.d):
                     player.polarVel[0] -= min(speedBoostOnPress//4, player.polarVel[0]//6)
                 elif keysNsprites.right and keysNsprites.d:
@@ -165,6 +167,8 @@ def runGame():
                 dy = player.hitbox.top - obj.hitbox.top
                 collide = obj.mask.overlap(player.mask, (dx, dy))
                 if collide: 
+                    player.dead = True
+                    player.vel = player.vel * 0
                     if not obj.sounded:
                         sounds[obj.random].play()
                         obj.sounded = True
@@ -209,6 +213,11 @@ def runGame():
                     f.close()
                     textBoxes.remove(textBoxes[-1])
                     textBoxCreated = False
+                    running = False
+            elif player.dead:
+                finishText.draw("L", (xmax//2, ymax//2), screen)
+                pg.display.update()
+                if menu_keys.enter:
                     running = False
     gameSound.stop()
     return True #when the game is over occurs
