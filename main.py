@@ -215,11 +215,11 @@ def runGame():
                 player.dead = True
                 
             if (xmax - trash[-1].pos[0] > trashInterval):
-                trash.append(Obstacle(trashSprites,np.array([3.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0] - 100))
+                trash.append(Obstacle(trashSprites,np.array([3.5*xmax,randrange(150, ymax-100, 50)]), player.pos[0] - 100))
                 trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
 
             if (xmax - boosters[-1].pos[0] > boostInterval):
-                boosters.append(Powerup(boostSprites,np.array([3.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0] - 100))
+                boosters.append(Powerup(boostSprites,np.array([3.5*xmax,randrange(150, ymax-100, 50)]), player.pos[0] - 100))
                 boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
             # print(player.pos)
 
