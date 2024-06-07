@@ -65,7 +65,7 @@ def runGame():
     trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
 
     boosters = [Powerup(boostSprites, np.array([2.5*xmax, randrange(0, ymax-100, 50)]), 0)]
-    boostIntervalMultiplier = 0.6
+    boostIntervalMultiplier = 1.5
     boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
     
     player = Player()
