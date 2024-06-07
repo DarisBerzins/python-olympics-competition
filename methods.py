@@ -218,7 +218,7 @@ class textBox():
         self.textColor = colors.white
         self.activeColor = colors.selectedButtonColor
         self.inactiveColor = colors.unSelectedButtonColor
-        self.currentColor = self.inactiveColor
+        self.currentColor = self.activeColor
         self.pos = (x,y)
         self.rect = pg.Rect(x, y, width, height)
         self.rect.center = self.pos
@@ -296,6 +296,9 @@ class Borders():
         self.rect.left = playerPos % xmax - xmax
         self.rect2.left = playerPos % xmax
 
+class Cigarettes():
+    def __init__(self, x, y):
+        pass
 
 #methods
 def InitPygame():
