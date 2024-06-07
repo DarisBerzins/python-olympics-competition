@@ -288,7 +288,6 @@ def gameFrame():
                 
             textBoxes.remove(textBoxes[-1])
             textBoxCreated = False
-            print("AAAAAAAAAAAAAAAAAA")
             setMenu()
             pulseEnter = False
             
@@ -296,8 +295,6 @@ def gameFrame():
         if menu_keys.enter and pulseEnter:
             pulseEnter = False
             deadbuttons[select].execute()
-            print("balls located")
-            print(select)
         
         dead_surf = pg.Surface((650,325))
         dead_surf.set_alpha(128)
@@ -336,16 +333,17 @@ def initScoreboard():
             scores.append(score)
     # print(scores)
     
-    scoreboard_rect = pg.Rect(0,0,600,600)
+    scoreboard_rect = pg.Rect(0,0,500,400)
     scoreboard_rect.center = (xmax/2,ymax/2)
     pg.draw.rect(screen, colors.white, scoreboard_rect)
     scores.sort(key = lambda x: x[1])
-    # print(scores)
+    scores = scores[0:min(len(scores),10)]
+    
     step = 100
     pos = 1
     for line in scores:
-        txt = Text("string", "assets/power_pixel-7.ttf", 16, colors.black)
-        txt.draw(str(pos)+". "+line[0]+" "+str(line[1]), (xmax/2, step),screen)
+        txt = Text("string", "assets/power_pixel-7.ttf", 24, colors.black)
+        txt.draw(str(pos)+". "+line[0]+" "+str(line[1]), (xmax/2, step+100),screen)
         step += 25
         pos += 1
 
@@ -374,7 +372,7 @@ def menuFrame():
     global select, pulseEnter
     if menu_keys.enter and pulseEnter:
         pulseEnter = False
-        print(select)
+        # print(select)
         if select == 0: 
             if enableMusic: menuSound.stop()
         buttons[select].execute()
