@@ -33,6 +33,9 @@ menuSound.set_volume(0.15)
 startingSound = pg.mixer.Sound('assets/sounds/starting-sound.wav')
 startingSound.set_volume(0.10)
 
+finishSound = pg.mixer.Sound('assets/sounds/finish-sound.wav')
+finishSound.set_volume(0.3)
+
 trashSprites = []
 for file in os.listdir("assets/trash"):
     trashSprites.append(pg.image.load(os.path.join("assets/trash",file)))
@@ -289,6 +292,7 @@ def gameFrame():
         if not textBoxCreated:
             textBoxes.append(textBox(300, 60, xmax//2, ymax//2, "assets/power_pixel-7.ttf", 36))
             textBoxCreated = True
+            finishSound.play()
         if textBoxes[-1].returned:
             with open("scores.csv","a") as f:
                 f.write(textBoxes[-1].getText() + "," + str(round(runtime,3)) + "\n")
