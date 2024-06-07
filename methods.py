@@ -78,6 +78,7 @@ class menuKeys():
     up = False
     down = False
     enter = False
+    escape = False
 
 class animatedSurface():
     sprites = []
