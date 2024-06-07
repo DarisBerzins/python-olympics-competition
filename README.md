@@ -3,7 +3,7 @@
 # TODO
 
 * ~Key press indicators~
-* Main Menu
+* ~Main Menu~
 * Store highscores in file
 * ~Rotate boat when turning~
 * ~Fix movement~
