@@ -14,3 +14,5 @@ aaaaaaa	12.875
 sfsfdsdf	14.833
 sdasd	11.614
 fsdfsd	16.319
+AA	15.791
+./,vm/.x,mv/.x,mv/.xcmv	17.335
