@@ -147,9 +147,10 @@ class Obstacle():
         self.mask = pg.mask.from_surface(self.sprite)
         self.sounded = False
     
-    def draw(self,screen):
+    def draw(self,screen, xmax):
         self.hitbox.center = self.pos
-        screen.blit(self.sprite,self.hitbox)
+        if -1000 < self.hitbox.centerx < xmax + 1000:
+            screen.blit(self.sprite,self.hitbox)
 
 class Powerup():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
@@ -273,10 +274,11 @@ class button():
     def execute(self):
         self.function()
 
-# class Borders():
+class Borders():
     
-#     def __init__(self, path):
-#         surface
+    def __init__(self, path):
+        self.surface = pg.image.load(path)
+
 
 #methods
 def InitPygame():

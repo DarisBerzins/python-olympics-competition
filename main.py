@@ -58,11 +58,11 @@ def runGame():
     running = True
     
     trash = [Obstacle(trashSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
-    trashIntervalMultiplier = 0.75
+    trashIntervalMultiplier = 0.6
     trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
 
     boosters = [Powerup(boostSprites, np.array([2.5*xmax, randrange(0, ymax-100, 50)]), 0)]
-    boostIntervalMultiplier = 0.75
+    boostIntervalMultiplier = 0.6
     boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
     
     player = Player()
@@ -193,7 +193,7 @@ def runGame():
 
             for obj in trash:
                 obj.pos[0] = xmax-(obj.initialpos-player.pos[0]) #trash movement
-                obj.draw(screen)
+                obj.draw(screen, xmax)
                 dx = player.hitbox.left - obj.hitbox.left
                 dy = player.hitbox.top - obj.hitbox.top
                 collide = obj.mask.overlap(player.mask, (dx, dy))
@@ -206,11 +206,11 @@ def runGame():
                     obj.sounded = False                
                 
             if (xmax - trash[-1].pos[0] > trashInterval):
-                trash.append(Obstacle(trashSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                trash.append(Obstacle(trashSprites,np.array([3.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0] - 100))
                 trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
 
             if (xmax - boosters[-1].pos[0] > boostInterval):
-                boosters.append(Powerup(boostSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                boosters.append(Powerup(boostSprites,np.array([3.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0] - 100))
                 boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
             # print(player.pos)
 
