@@ -29,6 +29,9 @@ for file in os.listdir("assets/trash"):
 gameSound = pg.mixer.Sound('assets/sounds/background-music.wav')
 gameSound.set_volume(0.25)
 
+menuSound = pg.mixer.Sound('assets/sounds/menu-music.wav')
+menuSound.set_volume(0.25)
+
 sounds = []
 for file in os.listdir("assets/trash_sounds"):
     snd = pg.mixer.Sound(os.path.join("assets/trash_sounds",file))
@@ -262,17 +265,24 @@ highscoresbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[1])
 menu_keys = menuKeys()
 select = 0
 pressed = False
+firstTimeInMenu = True
 
 buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,255,0),runGame),
            button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0),lambda: deathMenu(dM_run)),
            button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0),escape)]
 
 while menu:
+    if firstTimeInMenu:
+        menuSound.play(-1)
+        firstTimeInMenu = False
     for event in pg.event.get(pump=True):  
         if event.type == pg.QUIT or menu_keys.escape:
             menu = False                 
         if event.type == pg.KEYDOWN and not pressed:
             if event.key == pg.K_RETURN:
+                if select == 0: 
+                    menuSound.stop()
+                    firstTimeInMenu = True
                 buttons[select].execute()
             match event.key:
                 case pg.K_UP: menu_keys.up = True; pressed = True
