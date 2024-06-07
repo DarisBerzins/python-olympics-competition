@@ -1,7 +1,7 @@
 import pygame as pg
 from methods import *
 import os
-from random import randrange
+from random import randrange, randint
 
 InitPygame()
 
@@ -29,6 +29,9 @@ for file in os.listdir("assets/trash"):
 gameSound = pg.mixer.Sound('assets/sounds/background-music.wav')
 gameSound.set_volume(0.25)
 
+menuSound = pg.mixer.Sound('assets/sounds/menu-music.wav')
+menuSound.set_volume(0.25)
+
 sounds = []
 for file in os.listdir("assets/trash_sounds"):
     snd = pg.mixer.Sound(os.path.join("assets/trash_sounds",file))
@@ -45,7 +48,8 @@ def runGame():
     running = True
     
     trash = [Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
-    trashinterval = xmax
+    trashIntervalMultiplier = 0.75
+    trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
     
     player = Player()
     keysNsprites = boatState(xmax, ymax)
@@ -92,7 +96,8 @@ def runGame():
                             case pg.K_LEFT: keysNsprites.left = True
                             case pg.K_d: keysNsprites.d = True
                             case pg.K_a: keysNsprites.a = True
-                            case pg.K_ESCAPE: menu_keys.escape = True; 
+                            case pg.K_ESCAPE: menu_keys.escape = True
+                            case pg.K_RETURN: menu_keys.enter = True
                     
                     if event.type == pg.KEYUP:
                         match event.key:
@@ -100,11 +105,12 @@ def runGame():
                             case pg.K_LEFT: keysNsprites.left = False
                             case pg.K_d: keysNsprites.d = False
                             case pg.K_a: keysNsprites.a = False
+                            case pg.K_RETURN: menu_keys.enter = False
 
             player.polarVel[0] = np.linalg.norm(player.vel)
             player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
 
-            if not pastFinish:
+            if not (pastFinish or player.dead):
                 if (keysNsprites.right and keysNsprites.left) or (keysNsprites.left and keysNsprites.d) or (keysNsprites.right and keysNsprites.a) or (keysNsprites.a and keysNsprites.d):
                     player.polarVel[0] -= min(speedBoostOnPress//4, player.polarVel[0]//6)
                 elif keysNsprites.right and keysNsprites.d:
@@ -148,7 +154,7 @@ def runGame():
             player.accel = np.array([0.0,  0.0])
 
             bgRect.left = player.pos[0] % xmax - xmax
-            bgRect2.left = player.pos[0] % xmax
+            bgRect2.left = player.pos[0] % xmax - 10
             
             bg = background.update()
             screen.blit(bg, bgRect)
@@ -161,16 +167,17 @@ def runGame():
                 dy = player.hitbox.top - obj.hitbox.top
                 collide = obj.mask.overlap(player.mask, (dx, dy))
                 if collide: 
+                    player.dead = True
+                    player.vel = player.vel * 0
                     if not obj.sounded:
                         sounds[obj.random].play()
                         obj.sounded = True
                 else:
                     obj.sounded = False
                 
-    
-            dist = (xmax-(obj.initialpos-player.pos[0]))
-            if (xmax - trash[-1].pos[0] > trashinterval):
+            if (xmax - trash[-1].pos[0] > trashInterval):
                 trash.append(Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
             # print(player.pos)
 
             player.draw(screen)
@@ -206,6 +213,11 @@ def runGame():
                     f.close()
                     textBoxes.remove(textBoxes[-1])
                     textBoxCreated = False
+                    running = False
+            elif player.dead:
+                finishText.draw("L", (xmax//2, ymax//2), screen)
+                pg.display.update()
+                if menu_keys.enter:
                     running = False
     gameSound.stop()
     return True #when the game is over occurs
@@ -262,17 +274,24 @@ highscoresbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[1])
 menu_keys = menuKeys()
 select = 0
 pressed = False
+firstTimeInMenu = True
 
 buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,255,0),runGame),
            button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0),lambda: deathMenu(dM_run)),
            button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0),escape)]
 
 while menu:
+    if firstTimeInMenu:
+        menuSound.play(-1)
+        firstTimeInMenu = False
     for event in pg.event.get(pump=True):  
         if event.type == pg.QUIT or menu_keys.escape:
             menu = False                 
         if event.type == pg.KEYDOWN and not pressed:
             if event.key == pg.K_RETURN:
+                if select == 0: 
+                    menuSound.stop()
+                    firstTimeInMenu = True
                 buttons[select].execute()
             match event.key:
                 case pg.K_UP: menu_keys.up = True; pressed = True
