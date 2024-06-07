@@ -1,6 +1,7 @@
 import pygame as pg
 from methods import *
 import os
+import csv
 from random import randrange, randint
 
 InitPygame()
@@ -243,9 +244,9 @@ def runGame():
                     textBoxes.append(textBox(200, 40, xmax//2, ymax//2, "assets/power_pixel-7.ttf", 36))
                     textBoxCreated = True
                 if textBoxes[-1].returned:
-                    f = open("scores.txt","a")
-                    f.write("\n" + textBoxes[-1].getText() + "\t" + str(round(runtime,3)))
-                    f.close()
+                    with open("scores.csv","a") as f:
+                        f.write(textBoxes[-1].getText() + "," + str(round(runtime,3)) + "\n")
+                        
                     textBoxes.remove(textBoxes[-1])
                     textBoxCreated = False
                     running = False
@@ -259,13 +260,13 @@ def runGame():
 
 def deathMenu(dM):
     scores = []
-    f = open("scores.txt","r")
-    for line in f:
-        elements = line.split("\t")
-        # print(elements)
-        score = [elements[0], float(elements[1])]
-        scores.append(score)
-    f.close()
+    with open("scores.csv","r") as f:
+        for line in f:
+            score = line.strip("\n").split(",")
+            score[-1] = float(score[-1])
+            scores.append(score)
+    # print(scores)
+    
     scoreboard_rect = pg.Rect(0,0,600,600)
     scoreboard_rect.center = (xmax/2,ymax/2)
     pg.draw.rect(screen, colors.white, scoreboard_rect)

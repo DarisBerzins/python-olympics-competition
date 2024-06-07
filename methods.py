@@ -220,6 +220,7 @@ class textBox():
         self.inactiveColor = colors.unSelectedButtonColor
         self.currentColor = self.inactiveColor
         self.rect = pg.Rect(x, y, width, height)
+        self.rect.center = (x,y)
         self.text = ''
         self.returned = False
         self.textSurface = self.font.render(self.text, True, self.textColor)
