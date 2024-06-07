@@ -301,7 +301,7 @@ def runGame():
     if enableMusic: gameSound.stop()
     return True #when the game is over occurs
 
-def scoreb(dM):
+def scoreboard(dM):
     scores = []
     with open("scores.csv","r") as f:
         for line in f:
