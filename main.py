@@ -77,6 +77,8 @@ def runGame():
     runtimeText = Text('Runtime', pixel_font, 32, colors.red)
     finishText = Text("string", pixel_font, 32, colors.red)
 
+    border = Borders('assets/borders.png')
+
     speedBoostOnPress = 350
     speedBoostOnBooster = 1000
     angularVelocity = 1.8
@@ -204,7 +206,11 @@ def runGame():
                         trashSounds[obj.random].play()
                         obj.sounded = True
                 else:
-                    obj.sounded = False                
+                    obj.sounded = False
+
+            border.update(player.pos[0], xmax)
+            if border.mask.overlap(player.mask, (player.hitbox.left, player.hitbox.top)):
+                player.dead = True
                 
             if (xmax - trash[-1].pos[0] > trashInterval):
                 trash.append(Obstacle(trashSprites,np.array([3.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0] - 100))

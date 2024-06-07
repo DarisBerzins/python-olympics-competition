@@ -279,6 +279,14 @@ class Borders():
     
     def __init__(self, path):
         self.surface = pg.image.load(path)
+        self.surface2 = pg.image.load(path)
+        self.rect = self.surface.get_rect()
+        self.rect2 = self.surface2.get_rect()
+        self.mask = pg.mask.from_surface(self.surface)
+
+    def update(self, playerPos, xmax):
+        self.rect.left = playerPos % xmax - xmax
+        self.rect2.left = playerPos % xmax
 
 
 #methods
