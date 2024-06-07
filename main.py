@@ -269,7 +269,7 @@ def gameFrame():
     speed.draw(np.linalg.norm(player.vel), (xmax-50, 20), screen)
     angleText.draw(player.angle, (20, ymax-20), screen)
 
-    runtimeText.draw(runtime, (xmax/2,40), screen)
+    runtimeText.draw(runtime, (xmax/2,60), screen)
     
     if player.pos[0]<startfinish.finishpos:
         pastFinish = True
