@@ -251,9 +251,9 @@ menu_keys = menuKeys()
 select = 0
 pressed = False
 
-buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,255,0)),
-           button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0)),
-           button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0))]
+buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,255,0),runGame),
+           button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0),lambda: deathMenu(dM_run)),
+           button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0),pg.K_ESCAPE)]
 
 while menu:
     for event in pg.event.get(pump=True):        
@@ -262,15 +262,7 @@ while menu:
             
         if event.type == pg.KEYDOWN and not pressed:
             if event.key == pg.K_RETURN:
-                if select == 0:
-                    if runGame():
-                        deathMenu(dM_run)
-                elif select == 1: 
-                    dM_run = True
-                    deathMenu(dM_run)
-                elif select == 2:
-                    menu = False
-                    pg.quit()
+                buttons[select].execute()
             match event.key:
                 case pg.K_UP: menu_keys.up = True; pressed = True
                 case pg.K_DOWN: menu_keys.down = True; pressed = True

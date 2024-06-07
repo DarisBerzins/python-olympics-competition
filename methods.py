@@ -224,16 +224,20 @@ class textBox():
         screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
 
 class button():
-    def __init__(self,width,height,pos,text,font,font_size:int,font_color, buttoncolor):
+    def __init__(self,width,height,pos,text,font,font_size:int,font_color, buttoncolor, function):
         self.rect = pg.Rect(0,0,width,height)
         self.rect.center = pos
         self.text = text
+        self.function = function
         self.str = Text("string",font,font_size,font_color)
         self.buttoncolor = buttoncolor
 
     def draw(self,screen):
         pg.draw.rect(screen,self.buttoncolor,self.rect)
         self.str.draw(self.text,self.rect.center,screen)
+        
+    def execute(self):
+        self.function()
 
 
 class colors():
