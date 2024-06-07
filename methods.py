@@ -183,8 +183,10 @@ class startNfinish():
     def draw(self, screen, position, xmax):
         self.startRect.centerx = xmax//2 - (self.startpos - position)
         self.finishRect.centerx = xmax//2 - (self.finishpos - position)
-        screen.blit(self.startSurface, self.startRect)
-        screen.blit(self.finishSurface, self.finishRect)
+        if -1000 < self.startRect.centerx < xmax + 1000:
+            screen.blit(self.startSurface, self.startRect)
+        if -1000 < self.finishRect.centerx < xmax + 1000:
+            screen.blit(self.finishSurface, self.finishRect)
 
 class Text():
     def __init__(self, type: str, font, fontSize: int, color):
@@ -270,6 +272,11 @@ class button():
         
     def execute(self):
         self.function()
+
+# class Borders():
+    
+#     def __init__(self, path):
+#         surface
 
 #methods
 def InitPygame():
