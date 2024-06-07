@@ -238,10 +238,10 @@ def runGame():
                 keysNsprites.left = False
                 keysNsprites.right = False
 
-                finishText.draw("Congrats lol ur time is: " + str(runtime), (xmax/2,ymax/2), screen)
+                finishText.draw("Finish!!", (xmax/2-50,ymax/2-50), screen)
                 pg.display.update()
                 if not textBoxCreated:
-                    textBoxes.append(textBox(200, 40, xmax//2, ymax//2, "assets/power_pixel-7.ttf", 36))
+                    textBoxes.append(textBox(300, 60, xmax//2, ymax//2, "assets/power_pixel-7.ttf", 36))
                     textBoxCreated = True
                 if textBoxes[-1].returned:
                     with open("scores.csv","a") as f:

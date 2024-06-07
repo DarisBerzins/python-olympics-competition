@@ -221,10 +221,11 @@ class textBox():
         self.currentColor = self.inactiveColor
         self.rect = pg.Rect(x, y, width, height)
         self.rect.center = (x,y)
-        self.text = ''
+        self.text = 'Type your name here!'
         self.returned = False
         self.textSurface = self.font.render(self.text, True, self.textColor)
         self.writing = False
+        self.firstinit = False
 
     def handleEvent(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -236,6 +237,9 @@ class textBox():
                 self.currentColor = self.inactiveColor
 
         elif event.type == pg.KEYDOWN and self.writing:
+            if self.firstinit:
+                self.text = ''
+                self.firstinit = False
             if event.key == pg.K_RETURN:
                 self.writing = False
                 self.returned = True
