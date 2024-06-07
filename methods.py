@@ -216,9 +216,7 @@ class textBox():
         self.initHeight = height
         self.font = pg.font.Font(font, fontSize)
         self.textColor = colors.white
-        self.activeColor = colors.selectedButtonColor
-        self.inactiveColor = colors.unSelectedButtonColor
-        self.currentColor = self.activeColor
+        self.currentColor = colors.selectedButtonColor
         self.pos = (x,y)
         self.rect = pg.Rect(x, y, width, height)
         self.rect.center = self.pos
@@ -227,20 +225,14 @@ class textBox():
         self.textSurface = self.font.render(self.text, True, self.textColor)
         self.textrect = self.textSurface.get_rect()
         self.textrect.center = self.rect.center
-        self.writing = False
-        self.firstinit = False
+        self.writing = True
+        self.firstEvent = True
 
     def handleEvent(self, event):
-        if event.type == pg.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos) and not self.returned:
-                self.writing = True
-                self.currentColor = self.activeColor
+        if event.type == pg.KEYDOWN and self.writing:
+            if self.firstEvent:
+                self.firstEvent = False
                 self.text = ''
-            else: 
-                self.writing = False
-                self.currentColor = self.inactiveColor
-
-        elif event.type == pg.KEYDOWN and self.writing:
             if event.key == pg.K_RETURN:
                 self.writing = False
                 self.returned = True
