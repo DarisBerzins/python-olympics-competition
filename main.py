@@ -207,6 +207,7 @@ def runGame():
                     textBoxes.remove(textBoxes[-1])
                     textBoxCreated = False
                     running = False
+    gameSound.stop()
     return True #when the game is over occurs
 
 def deathMenu(dM):
