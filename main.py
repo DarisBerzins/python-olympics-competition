@@ -57,11 +57,11 @@ def runGame():
 
     running = True
     
-    trash = [Obstacle(trashSprites,trashSounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
+    trash = [Obstacle(trashSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
     trashIntervalMultiplier = 0.75
     trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
 
-    boosters = [Powerup(boostSprites, boostSounds, np.array([2.5*xmax, randrange(0, ymax-100, 50)]), 0)]
+    boosters = [Powerup(boostSprites, np.array([2.5*xmax, randrange(0, ymax-100, 50)]), 0)]
     boostIntervalMultiplier = 0.75
     boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
     
@@ -166,13 +166,9 @@ def runGame():
                 if collide: 
                     if not obj.used:
                         player.polarVel[0] += speedBoostOnBooster
-                        obj.used = True
-                    if not obj.sounded:
                         boostSounds[obj.random].play()
-                        obj.sounded = True
-                    boosters.pop(boosters.index(obj))
-                else:
-                    obj.sounded = False
+                    obj.used = True
+                    
 
             player.vel[0] = -np.cos(player.polarVel[1])*player.polarVel[0]
             player.vel[1] = np.sin(player.polarVel[1])*player.polarVel[0]
@@ -209,11 +205,11 @@ def runGame():
                     obj.sounded = False                
                 
             if (xmax - trash[-1].pos[0] > trashInterval):
-                trash.append(Obstacle(trashSprites,trashSounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                trash.append(Obstacle(trashSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
                 trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
 
             if (xmax - boosters[-1].pos[0] > boostInterval):
-                boosters.append(Powerup(boostSprites,boostSounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                boosters.append(Powerup(boostSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
                 boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
             # print(player.pos)
 

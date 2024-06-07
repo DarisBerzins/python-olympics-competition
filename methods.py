@@ -137,7 +137,7 @@ class Player():
 
 class Obstacle():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
-    def __init__(self,sprites,sounds,pos,initialpos):
+    def __init__(self,sprites,pos,initialpos):
         self.random = randrange(0,len(sprites))
         self.sprite = sprites[self.random]
         self.sprite = pg.transform.scale_by(self.sprite, 1)
@@ -153,7 +153,7 @@ class Obstacle():
 
 class Powerup():
     # sprite = [pg.image.load("assets/rat.png"), pg.image.load("assets/")]  
-    def __init__(self,sprites,sounds,pos,initialpos):
+    def __init__(self,sprites,pos,initialpos):
         self.random = randrange(0,len(sprites))
         self.sprite = sprites[self.random]
         self.sprite = pg.transform.scale_by(self.sprite, 1)
@@ -161,12 +161,12 @@ class Powerup():
         self.initialpos = initialpos
         self.hitbox = self.sprite.get_rect()
         self.mask = pg.mask.from_surface(self.sprite)
-        self.sounded = False
         self.used = False
     
     def draw(self,screen):
-        self.hitbox.center = self.pos
-        screen.blit(self.sprite,self.hitbox)
+        if not self.used:
+            self.hitbox.center = self.pos
+            screen.blit(self.sprite,self.hitbox)
 
 class startNfinish():
     def __init__(self, startpos, lengthofTrack, startSurface, finishSurface, xmax, ymax):

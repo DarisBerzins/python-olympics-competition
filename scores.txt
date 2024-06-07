@@ -14,9 +14,4 @@ aaaaaaa	12.875
 sfsfdsdf	14.833
 sdasd	11.614
 fsdfsd	16.319
-<<<<<<< HEAD
-AA	15.791
-./,vm/.x,mv/.x,mv/.xcmv	17.335
-=======
 asdfasd	20.062
->>>>>>> ae4712d03b08c5ccaa4854e5e7afac205278507f
