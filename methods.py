@@ -110,14 +110,14 @@ class Player():
     frame = 0
     dead = False
     for file in os.listdir(folderdir):
-        sprites.append(pg.transform.scale_by(pg.image.load(os.path.join(folderdir, file)), 2.2))
+        sprites.append(pg.transform.scale_by(pg.image.load(os.path.join(folderdir, file)), 2))
     for i in range(len(sprites)):
         tempList = []
         for angleRange in range(0, 361):
             tempList.append(pg.transform.rotate(sprites[i], angleRange))
         rotatedSprites.append(tempList)
     
-    hitboxSprite = pg.transform.scale_by(pg.image.load("assets/kayak-no-paddles.png"), 2.2)
+    hitboxSprite = pg.transform.scale_by(pg.image.load("assets/kayak-no-paddles.png"), 2)
     hitbox = hitboxSprite.get_rect()
     for i in range(0, 361):
         rotatedHitboxes.append(pg.transform.rotate(hitboxSprite, i))

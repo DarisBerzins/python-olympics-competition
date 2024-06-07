@@ -25,10 +25,13 @@ pixel_font = "assets/power_pixel-7.ttf"
 textBoxes = []
 
 gameSound = pg.mixer.Sound('assets/sounds/background-music.wav')
-gameSound.set_volume(0.25)
+gameSound.set_volume(0.15)
 
 menuSound = pg.mixer.Sound('assets/sounds/menu-music.wav')
-menuSound.set_volume(0.25)
+menuSound.set_volume(0.15)
+
+startingSound = pg.mixer.Sound('assets/sounds/starting-sound.wav')
+startingSound.set_volume(0.10)
 
 trashSprites = []
 for file in os.listdir("assets/trash"):
@@ -37,7 +40,7 @@ for file in os.listdir("assets/trash"):
 trashSounds = []
 for file in os.listdir("assets/trash_sounds"):
     snd = pg.mixer.Sound(os.path.join("assets/trash_sounds",file))
-    snd.set_volume(0.25)
+    snd.set_volume(0.35)
     trashSounds.append(snd)
 
 boostSprites = []
@@ -47,7 +50,7 @@ for file in os.listdir("assets/boosts"):
 boostSounds = []
 for file in os.listdir("assets/boost_sounds"):
     snd = pg.mixer.Sound(os.path.join("assets/boost_sounds", file))
-    snd.set_volume(0.25)
+    snd.set_volume(0.35)
     boostSounds.append(snd)
 
 keysNsprites = boatState(xmax, ymax)
@@ -119,7 +122,7 @@ deadbuttons = [button(400,50,(xmax/2,ymax/2),"RESTART",pixel_font,32,(255,0,0),(
            button(400,50,(xmax/2,ymax/2+80),"MAIN MENU",pixel_font,32,(255,0,0),(0,255,0),setMenu)]
 
 def initGame():
-    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter
+    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter, startingSoundPlayed
     trash = [Obstacle(trashSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
     trashIntervalMultiplier = 0.6
     trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
@@ -134,7 +137,7 @@ def initGame():
     speed = Text('speed', None, 24, colors.white)
     angleText = Text('angle', None, 24, colors.white)
 
-    startfinish = startNfinish(-1000, 10000, pg.image.load('assets/start_line.png'), pg.image.load('assets/finish_line.png'), xmax, ymax)
+    startfinish = startNfinish(-1000, 25000, pg.image.load('assets/start_line.png'), pg.image.load('assets/finish_line.png'), xmax, ymax)
     runtime = 0
     runtimeText = Text('Runtime', pixel_font, 32, colors.selectedButtonColor)
     finishText = Text("string", pixel_font, 32, colors.selectedButtonColor)
@@ -156,9 +159,10 @@ def initGame():
     keysNsprites.stopInputs = False
     select = 0
     pressed = False
+    startingSoundPlayed = False
 
 def gameFrame():
-    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter
+    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter, startingSoundPlayed
     player.polarVel[0] = np.linalg.norm(player.vel)
     player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
 
@@ -319,6 +323,9 @@ def gameFrame():
         deadbuttons[select].buttoncolor = colors.selectedButtonColor
         
     elif player.pos[0]<startfinish.startpos and player.pos[0]>startfinish.finishpos:
+        if not startingSoundPlayed:
+            startingSound.play()
+            startingSoundPlayed = True
         runtime +=dt
 
 def exitGame():
