@@ -1,7 +1,7 @@
 import pygame as pg
 from methods import *
 import os
-from random import randrange
+from random import randrange, randint
 
 InitPygame()
 
@@ -48,7 +48,8 @@ def runGame():
     running = True
     
     trash = [Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
-    trashinterval = xmax
+    trashIntervalMultiplier = 0.75
+    trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
     
     player = Player()
     keysNsprites = boatState(xmax, ymax)
@@ -151,7 +152,7 @@ def runGame():
             player.accel = np.array([0.0,  0.0])
 
             bgRect.left = player.pos[0] % xmax - xmax
-            bgRect2.left = player.pos[0] % xmax
+            bgRect2.left = player.pos[0] % xmax - 10
             
             bg = background.update()
             screen.blit(bg, bgRect)
@@ -170,10 +171,9 @@ def runGame():
                 else:
                     obj.sounded = False
                 
-    
-            dist = (xmax-(obj.initialpos-player.pos[0]))
-            if (xmax - trash[-1].pos[0] > trashinterval):
+            if (xmax - trash[-1].pos[0] > trashInterval):
                 trash.append(Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
             # print(player.pos)
 
             player.draw(screen)
