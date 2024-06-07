@@ -262,8 +262,15 @@ while menu:
             
         if event.type == pg.KEYDOWN and not pressed:
             if event.key == pg.K_RETURN:
-                if runGame():
+                if select == 0:
+                    if runGame():
+                        deathMenu(dM_run)
+                elif select == 1: 
+                    dM_run = True
                     deathMenu(dM_run)
+                elif select == 2:
+                    menu = False
+                    pg.quit()
             match event.key:
                 case pg.K_UP: menu_keys.up = True; pressed = True
                 case pg.K_DOWN: menu_keys.down = True; pressed = True
