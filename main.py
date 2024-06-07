@@ -75,6 +75,7 @@ dM_run = True
 
 menubg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[0])
 highscoresbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[1])
+introbg = pg.image.load("assets/cover/" + os.listdir("assets/cover")[2])
 menu_keys = menuKeys()
 select = 0
 pressed = False
