@@ -13,7 +13,9 @@
 * ~Finish line~
 * ~Start line or countdown to starts~
 * ~Powerups?~
-* make destroyed boat sprite have white flags
-* end experience tm
+* ~make destroyed boat sprite have white flags~
+* ~end experience tm~ - 1 open heart surgery later
+* better scoreboard
+* tuning
 
 ## Comment all code when finished

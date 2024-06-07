@@ -13,7 +13,7 @@ ymax = 720
 reso = (xmax, ymax)
 screen = pg.display.set_mode(reso)
 
-enableMusic = False
+enableMusic = True
 
 background = animatedSurface("assets/bg", 20) #initialize the animation for the background
 bg = background.update()
@@ -87,7 +87,7 @@ def setMenu():
     menu = True
     game = False
     scorebd = False
-    print(menu,game,scorebd)
+    gameSound.stop()
 
 def setGame():
     global menu, game, scorebd, enteredGame, select
@@ -444,6 +444,7 @@ while running:
                 initGame()
             gameFrame()
             if not game:
+                print("balls")
                 exitGame()
         
         if scorebd:
