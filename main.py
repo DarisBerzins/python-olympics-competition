@@ -170,6 +170,7 @@ def runGame():
                     if not obj.sounded:
                         boostSounds[obj.random].play()
                         obj.sounded = True
+                    boosters.pop(boosters.index(obj))
                 else:
                     obj.sounded = False
 
