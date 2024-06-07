@@ -13,6 +13,8 @@ ymax = 720
 reso = (xmax, ymax)
 screen = pg.display.set_mode(reso)
 
+enableMusic = False
+
 background = animatedSurface("assets/bg", 20) #initialize the animation for the background
 bg = background.update()
 bgRect = bg.get_rect()
@@ -90,7 +92,7 @@ def runGame():
     textBoxCreated = False
     pastFinish = False
 
-    gameSound.play(-1)
+    if enableMusic: gameSound.play(-1)
 
     while running:
         pg.display.flip()
@@ -261,7 +263,7 @@ def runGame():
                 pg.display.update()
                 if menu_keys.enter:
                     running = False
-    gameSound.stop()
+    if enableMusic: gameSound.stop()
     return True #when the game is over occurs
 
 def deathMenu(dM):
@@ -324,7 +326,7 @@ buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,2
 
 while menu:
     if firstTimeInMenu:
-        menuSound.play(-1)
+        if enableMusic: menuSound.play(-1)
         firstTimeInMenu = False
     for event in pg.event.get(pump=True):  
         if event.type == pg.QUIT or menu_keys.escape:
@@ -332,7 +334,7 @@ while menu:
         if event.type == pg.KEYDOWN and not pressed:
             if event.key == pg.K_RETURN:
                 if select == 0: 
-                    menuSound.stop()
+                    if enableMusic: menuSound.stop()
                     firstTimeInMenu = True
                 buttons[select].execute()
             match event.key:
