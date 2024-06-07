@@ -444,8 +444,6 @@ while running:
         # print(menu,game,scorebd)
         if intro:
             screen.blit(introbg, screen.get_rect())
-            if menu_keys.enter:
-                intro = False
 
         if menu:
             if enteredMenu:
