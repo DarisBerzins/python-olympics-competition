@@ -22,21 +22,31 @@ pixel_font = "assets/power_pixel-7.ttf"
 
 textBoxes = []
 
-sprites = []
-for file in os.listdir("assets/trash"):
-    sprites.append(pg.image.load(os.path.join("assets/trash",file)))
-
 gameSound = pg.mixer.Sound('assets/sounds/background-music.wav')
 gameSound.set_volume(0.25)
 
 menuSound = pg.mixer.Sound('assets/sounds/menu-music.wav')
 menuSound.set_volume(0.25)
 
-sounds = []
+trashSprites = []
+for file in os.listdir("assets/trash"):
+    trashSprites.append(pg.image.load(os.path.join("assets/trash",file)))
+
+trashSounds = []
 for file in os.listdir("assets/trash_sounds"):
     snd = pg.mixer.Sound(os.path.join("assets/trash_sounds",file))
     snd.set_volume(0.25)
-    sounds.append(snd)
+    trashSounds.append(snd)
+
+boostSprites = []
+for file in os.listdir("assets/boosts"):
+    boostSprites.append(pg.image.load(os.path.join("assets/boosts", file)))
+
+boostSounds = []
+for file in os.listdir("assets/boost_sounds"):
+    snd = pg.mixer.Sound(os.path.join("assets/boost_sounds", file))
+    snd.set_volume(0.25)
+    boostSounds.append(snd)
 
 def runGame():
 
@@ -47,9 +57,13 @@ def runGame():
 
     running = True
     
-    trash = [Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
+    trash = [Obstacle(trashSprites,trashSounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
     trashIntervalMultiplier = 0.75
     trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
+
+    boosters = [Powerup(boostSprites, boostSounds, np.array([2.5*xmax, randrange(0, ymax-100, 50)]), 0)]
+    boostIntervalMultiplier = 0.75
+    boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
     
     player = Player()
     keysNsprites = boatState(xmax, ymax)
@@ -63,6 +77,7 @@ def runGame():
     finishText = Text("string", pixel_font, 32, colors.red)
 
     speedBoostOnPress = 350
+    speedBoostOnBooster = 1000
     angularVelocity = 1.8
     trailSpeed = 400
     resetTime = 500 #milliseconds
@@ -143,6 +158,21 @@ def runGame():
 
             player.frame = keysNsprites.selectSprite()
 
+            for obj in boosters:
+                obj.pos[0] = xmax-(obj.initialpos-player.pos[0]) #trash movement
+                dx = player.hitbox.left - obj.hitbox.left
+                dy = player.hitbox.top - obj.hitbox.top
+                collide = obj.mask.overlap(player.mask, (dx, dy))
+                if collide: 
+                    if not obj.used:
+                        player.polarVel[0] += speedBoostOnBooster
+                        obj.used = True
+                    if not obj.sounded:
+                        boostSounds[obj.random].play()
+                        obj.sounded = True
+                else:
+                    obj.sounded = False
+
             player.vel[0] = -np.cos(player.polarVel[1])*player.polarVel[0]
             player.vel[1] = np.sin(player.polarVel[1])*player.polarVel[0]
 
@@ -160,6 +190,8 @@ def runGame():
             screen.blit(bg, bgRect)
             screen.blit(bg, bgRect2)
 
+            for a in boosters: a.draw(screen)
+
             for obj in trash:
                 obj.pos[0] = xmax-(obj.initialpos-player.pos[0]) #trash movement
                 obj.draw(screen)
@@ -170,14 +202,18 @@ def runGame():
                     player.dead = True
                     player.vel = player.vel * 0
                     if not obj.sounded:
-                        sounds[obj.random].play()
+                        trashSounds[obj.random].play()
                         obj.sounded = True
                 else:
-                    obj.sounded = False
+                    obj.sounded = False                
                 
             if (xmax - trash[-1].pos[0] > trashInterval):
-                trash.append(Obstacle(sprites,sounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                trash.append(Obstacle(trashSprites,trashSounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
                 trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
+
+            if (xmax - boosters[-1].pos[0] > boostInterval):
+                boosters.append(Powerup(boostSprites,boostSounds,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), player.pos[0]))
+                boostInterval = randint(xmax//2, xmax//0.5) * boostIntervalMultiplier
             # print(player.pos)
 
             player.draw(screen)
