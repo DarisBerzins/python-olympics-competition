@@ -7,7 +7,7 @@
 * Store highscores in file
 * ~Rotate boat when turning~
 * ~Fix movement~
-* Border for water
+* ~Border for water~
 * ~Background music?~
 * ~Finish boat asset - splashes~
 * ~Finish line~
