@@ -226,6 +226,7 @@ class textBox():
         self.returned = False
         self.textSurface = self.font.render(self.text, True, self.textColor)
         self.textrect = self.textSurface.get_rect()
+        self.textrect.center = self.rect.center
         self.writing = False
         self.firstinit = False
 

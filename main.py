@@ -94,6 +94,8 @@ def runGame():
 
     if enableMusic: gameSound.play(-1)
 
+    select = 0
+    
     while running:
         pg.display.flip()
         t = 0.001 * pg.time.get_ticks()
@@ -126,6 +128,15 @@ def runGame():
                             case pg.K_d: keysNsprites.d = False
                             case pg.K_a: keysNsprites.a = False
                             case pg.K_RETURN: menu_keys.enter = False
+                             
+                if event.type == pg.KEYDOWN and not pressed:
+                    if event.key == pg.K_RETURN:
+                        deadbuttons[select].execute()
+                    match event.key:
+                        case pg.K_UP: menu_keys.up = True; pressed = True
+                        case pg.K_DOWN: menu_keys.down = True; pressed = True
+                else: pressed = False
+
 
             player.polarVel[0] = np.linalg.norm(player.vel)
             player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
@@ -234,10 +245,8 @@ def runGame():
             angleText.draw(player.angle, (20, ymax-20), screen)
 
             runtimeText.draw(runtime, (xmax/2,40), screen)
-
-            if player.pos[0]<startfinish.startpos and player.pos[0]>startfinish.finishpos:
-                runtime +=dt
-            elif player.pos[0]<startfinish.finishpos:
+            
+            if player.pos[0]<startfinish.finishpos:
                 pastFinish = True
                 keysNsprites.a = False
                 keysNsprites.d = False
@@ -253,7 +262,6 @@ def runGame():
                 for i in textBoxes: i.draw(screen)
                 pg.display.update()
                 
-                
                 if not textBoxCreated:
                     textBoxes.append(textBox(300, 60, xmax//2, ymax//2, "assets/power_pixel-7.ttf", 36))
                     textBoxCreated = True
@@ -264,15 +272,36 @@ def runGame():
                     textBoxes.remove(textBoxes[-1])
                     textBoxCreated = False
                     running = False
+                    
             elif player.dead:
-                finishText.draw("L", (xmax//2, ymax//2), screen)
-                pg.display.update()
-                if menu_keys.enter:
-                    running = False
+                dead_surf = pg.Surface((650,325))
+                dead_surf.set_alpha(128)
+                dead_rect = dead_surf.get_rect()
+                dead_rect.center = (xmax/2,ymax/2)
+                screen.blit(dead_surf,dead_rect)
+                finishText.draw("you crashed and drowned", (xmax//2, ymax//2-100), screen) 
+                finishText.draw("in the Seine River :(", (xmax//2, ymax//2-70), screen) 
+
+                if menu_keys.up: select-=1; menu_keys.up = False
+                elif menu_keys.down: select+=1; menu_keys.down = False
+                
+                if select == len(deadbuttons): select = 0
+                if select < 0: select = len(deadbuttons)-1    
+
+                for but in deadbuttons:
+                    but.draw(screen)
+                    but.buttoncolor = colors.unSelectedButtonColor
+                    buttons[select].buttoncolor = colors.selectedButtonColor
+                    pg.display.update()
+                    if menu_keys.enter:
+                        running = False
+            elif player.pos[0]<startfinish.startpos and player.pos[0]>startfinish.finishpos:
+                runtime +=dt
+                
     if enableMusic: gameSound.stop()
     return True #when the game is over occurs
 
-def deathMenu(dM):
+def scoreb(dM):
     scores = []
     with open("scores.csv","r") as f:
         for line in f:
@@ -327,8 +356,11 @@ pressed = False
 firstTimeInMenu = True
 
 buttons = [button(400,50,(xmax/2,ymax/2-70),"START",pixel_font,32,(255,0,0),(0,255,0),runGame),
-           button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0),lambda: deathMenu(dM_run)),
+           button(400,50,(xmax/2,ymax/2),"SCOREBOARD",pixel_font,32,(255,0,0),(0,255,0),lambda: scoreboard(dM_run)),
            button(400,50,(xmax/2,ymax/2+70),"QUIT",pixel_font,32,(255,0,0),(0,255,0),escape)]
+
+deadbuttons = [button(400,50,(xmax/2,ymax/2),"RESTART",pixel_font,32,(255,0,0),(0,255,0),runGame),
+           button(400,50,(xmax/2,ymax/2+80),"MAIN MENU",pixel_font,32,(255,0,0),(0,255,0),escape)]
 
 while menu:
     if firstTimeInMenu:
