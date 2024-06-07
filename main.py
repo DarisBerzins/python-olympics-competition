@@ -332,6 +332,7 @@ def exitGame():
 
 
 def initScoreboard():
+    global scores
     scores = []
     with open("scores.csv","r") as f:
         for line in f:
@@ -345,16 +346,11 @@ def initScoreboard():
     pg.draw.rect(screen, colors.white, scoreboard_rect)
     scores.sort(key = lambda x: x[1])
     scores = scores[0:min(len(scores),10)]
-    
-    step = 100
-    pos = 1
-    for line in scores:
-        txt = Text("string", "assets/power_pixel-7.ttf", 24, colors.black)
-        txt.draw(str(pos)+". "+line[0]+" "+str(line[1]), (xmax/2, step+100),screen)
-        step += 25
-        pos += 1
 
 def scoreboardFrame():
+    step = 100
+    pos = 1
+    
     for event in pg.event.get(pump=True):
         if event.type == pg.QUIT or menu_keys.escape:
             dM = False
@@ -370,6 +366,12 @@ def scoreboardFrame():
             match event.key:
                 case pg.K_UP: menu_keys.up = False
                 case pg.K_DOWN: menu_keys.down = False
+    screen.blit(highscoresbg,(0,0))
+    for line in scores:
+        txt = Text("string", "assets/power_pixel-7.ttf", 24, colors.black)
+        txt.draw(str(pos)+". "+line[0]+" "+str(line[1]), (xmax/2, step+100),screen)
+        step += 25
+        pos += 1
 
 
 def initMenu():
