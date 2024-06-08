@@ -125,7 +125,7 @@ deadbuttons = [button(400,50,(xmax/2,ymax/2),"RESTART",pixel_font,32,(255,0,0),(
            button(400,50,(xmax/2,ymax/2+80),"MAIN MENU",pixel_font,32,(255,0,0),(0,255,0),setMenu)]
 
 def initGame():
-    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter, startingSoundPlayed
+    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter, startingSoundPlayed, progressText
     trash = [Obstacle(trashSprites,np.array([2.5*xmax,randrange(0, ymax-100, 50)]), 0)]
     trashIntervalMultiplier = 0.6
     trashInterval = randint(xmax//2, xmax//0.5) * trashIntervalMultiplier
@@ -144,6 +144,7 @@ def initGame():
     runtime = 0
     runtimeText = Text('Runtime', pixel_font, 32, colors.selectedButtonColor)
     finishText = Text("string", pixel_font, 32, colors.selectedButtonColor)
+    progressText = Text("string", pixel_font, 32, colors.selectedButtonColor)
 
     border = Borders('assets/borders.png')
 
@@ -165,7 +166,7 @@ def initGame():
     startingSoundPlayed = False
 
 def gameFrame():
-    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter, startingSoundPlayed
+    global trash, trashIntervalMultiplier, trashInterval, boosters, boostIntervalMultiplier, boostInterval, player, fps, speed, angleText, startfinish, runtime, runtimeText, finishText, border, speedBoostOnPress, speedBoostOnBooster, angularVelocity, trailSpeed, resetTime, resetTimer, firstReset, allowAnyKey, textBoxCreated, pastFinish, select, pressed, flag, pulseEnter, startingSoundPlayed, progressText
     player.polarVel[0] = np.linalg.norm(player.vel)
     player.polarVel[1] = np.arctan2(player.vel[1], -player.vel[0])
 
@@ -268,11 +269,12 @@ def gameFrame():
     startfinish.draw(screen, player.pos[0], xmax)
     keysNsprites.drawKeypressIndicators(screen)
 
-    fps.draw(clock.get_fps(), (50, 20), screen)
-    speed.draw(np.linalg.norm(player.vel), (xmax-50, 20), screen)
-    angleText.draw(player.angle, (20, ymax-20), screen)
+    # fps.draw(clock.get_fps(), (50, 20), screen)
+    # speed.draw(np.linalg.norm(player.vel), (xmax-50, 20), screen)
+    # angleText.draw(player.angle, (20, ymax-20), screen)
 
     runtimeText.draw(runtime, (xmax/2,60), screen)
+    progressText.draw(str(int(((min(0, player.pos[0]-startfinish.startpos))/(startfinish.finishpos - startfinish.startpos))*100)) + '%', (xmax//2, ymax -60), screen)
     
     if player.pos[0]<startfinish.finishpos:
         pastFinish = True
